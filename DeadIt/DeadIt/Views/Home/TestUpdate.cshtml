@@ -1,0 +1,34 @@
+﻿@model DBText
+
+@{
+    ViewData["Title"] = "TestUpdate";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<input type="button" id="updateTextButton" value="Обновить текст и имя" />
+
+    <p>Текст: <span id="text"></span></p>
+    <p>Имя: <span id="name"></span></p>
+
+<<script>
+     $(document).ready(function () {
+         $("#updateTextButton").click(function () {
+             $.ajax({
+                 type: "GET",
+                 url: "/Home/UpdateText",
+                 dataType: "json",
+                 success: function (data) {
+                     $("#text").text(data._Text);
+                     $("#name").text(data._CharacterName);
+                     console.log(data)
+                 },
+                 error: function () {
+                     alert("Произошла ошибка при выполнении запроса!!");
+                 }
+             });
+         });
+     });
+</script>
+
+<h1>TestUpdate</h1>
