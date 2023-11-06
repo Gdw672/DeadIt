@@ -11,17 +11,34 @@
     <p>Текст: <span id="text"></span></p>
     <p>Имя: <span id="name"></span></p>
 
-<<script>
+<script>
      $(document).ready(function () {
+         var intervalIdText;
+
          $("#updateTextButton").click(function () {
              $.ajax({
                  type: "GET",
                  url: "/Home/UpdateText",
                  dataType: "json",
                  success: function (data) {
-                     $("#text").text(data._Text);
-                     $("#name").text(data._CharacterName);
-                     console.log(data)
+                     var text = data._Text;
+                     var name = data._CharacterName;
+                     var textSpan = $("#text");
+                     var nameSpan = $("#name");
+                     var currentIndexText = 0;
+
+                     clearInterval(intervalIdText);
+
+                     nameSpan.text(name);
+
+                     intervalIdText = setInterval(function () {
+                         if (currentIndexText < text.length) {
+                             textSpan.text(text.substring(0, currentIndexText + 1));
+                             currentIndexText++;
+                         } else {
+                             clearInterval(intervalIdText);
+                         }
+                     }, 40);
                  },
                  error: function () {
                      alert("Произошла ошибка при выполнении запроса!!");

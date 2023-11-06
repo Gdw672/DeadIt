@@ -44,13 +44,14 @@ namespace DeadIt.Controllers
         public ActionResult UpdateText()
         {
             var currentIndex = _sessionsController.GetInt(_currentIndexName);
+            var db = _deadItDBContext._textDBs.ToList();
             if (currentIndex == null)
             {
                 _sessionsController.SetInt(_currentIndexName, 0);
-                 currentIndex = _sessionsController.GetInt(_currentIndexName);
+                currentIndex = _sessionsController.GetInt(_currentIndexName);
+
             }
-            var db = _deadItDBContext._textDBs.ToList();
-            if(currentIndex < db.Count)
+            if (currentIndex < db.Count)
             {
                 var nextText = db[(int)currentIndex];
                 currentIndex++;
@@ -60,8 +61,7 @@ namespace DeadIt.Controllers
             else
             {
                 return Json(new { message = "За индексом!" });
-
-            }  
+            }
         }
     }
 }
