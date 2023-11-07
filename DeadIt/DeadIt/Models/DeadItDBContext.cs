@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
 namespace DeadIt.Models
 {
     public class DeadItDBContext : DbContext, IDeadItDBContext
     {
         public DbSet<DBText> _textDBs {  get; set; }
+        public DbSet<DBImages> _images {  get; set; }
 
         public DeadItDBContext(DbContextOptions options) : base(options) 
         {
@@ -23,9 +26,19 @@ namespace DeadIt.Models
         public int ID { get; set; }
     }
 
+    public class DBImages
+    {
+        [Key]
+        public int ID { get; set; }
+        public string ImageName { get; set; } = "";
+        public byte[] ImageData { get; set; }
+    }
+
     public interface IDeadItDBContext
     {
         public DbSet<DBText> _textDBs { get; set; }
+        public DbSet<DBImages> _images { get; set; }
+
         public int SaveChanges();
     }
 }

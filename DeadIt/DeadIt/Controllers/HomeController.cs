@@ -3,26 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using System.Diagnostics;
 using System.Web;
+using static DeadIt.Controllers.DataBaseController;
 
 namespace DeadIt.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IDeadItDBContext _deadItDBContext;
-        private readonly ISessionsController _sessionsController;
-        private readonly string _currentIndexName = "currentIndex";
-        public HomeController(ILogger<HomeController> logger, IDeadItDBContext deadItDBContext, ISessionsController sessionsController)
+        private readonly IDataBaseController _dataBaseController;
+        public HomeController(ILogger<HomeController> logger, IDataBaseController dataBaseController)
         {
             _logger = logger;
-            _deadItDBContext = deadItDBContext;
-            _sessionsController = sessionsController;
+            _dataBaseController = dataBaseController;
         }
 
         public IActionResult Index()
         {
-            var names = _deadItDBContext._textDBs.ToArray();
-            return View(names);
+            return View();
         }
         public IActionResult TestUpdate()
         {
@@ -43,25 +40,22 @@ namespace DeadIt.Controllers
 
         public ActionResult UpdateText()
         {
-            var currentIndex = _sessionsController.GetInt(_currentIndexName);
-            var db = _deadItDBContext._textDBs.ToList();
-            if (currentIndex == null)
+            var nextText = _dataBaseController.UpdateText();
+            if (nextText != null) 
             {
-                _sessionsController.SetInt(_currentIndexName, 0);
-                currentIndex = _sessionsController.GetInt(_currentIndexName);
-
-            }
-            if (currentIndex < db.Count)
-            {
-                var nextText = db[(int)currentIndex];
-                currentIndex++;
-                _sessionsController.SetInt(_currentIndexName, (int)currentIndex);
+                //DataBaseController.TryUpdateImage();
                 return Json(nextText);
             }
             else
             {
                 return Json(new { message = "За индексом!" });
             }
+        }
+
+
+        public ActionResult Image() 
+        {
+                return View(_dataBaseController.GetImage("Felix"));
         }
     }
 }

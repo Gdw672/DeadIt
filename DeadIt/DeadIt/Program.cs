@@ -2,6 +2,7 @@ using DeadIt.Controllers;
 using DeadIt.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using static DeadIt.Controllers.DataBaseController;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IDeadItDBContext, DeadItDBContext>();
 builder.Services.AddTransient<ISessionsController, SessionsController>();
+builder.Services.AddTransient<IDataBaseController, DataBaseController>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
