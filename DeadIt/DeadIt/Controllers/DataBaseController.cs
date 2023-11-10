@@ -7,7 +7,7 @@ namespace DeadIt.Controllers
     {
         private readonly IDeadItDBContext _deadItDBContext;
         private readonly ISessionsController _sessionsController;
-        public DataBaseController(IDeadItDBContext deadItDBContext, ISessionsController sessionsController )
+        public DataBaseController(IDeadItDBContext deadItDBContext, ISessionsController sessionsController)
         {
             _deadItDBContext = deadItDBContext;
             _sessionsController = sessionsController;
@@ -15,19 +15,18 @@ namespace DeadIt.Controllers
 
         public DBText UpdateText()
         {
-            var currentIndex = _sessionsController.GetInt(CookieNames._currentIndexName);
+            var currentIndex = _sessionsController.GetInt(SessionKeysNames._currentIndexName);
             var dbText = _deadItDBContext._textDBs.ToList();
             if (currentIndex == null)
             {
-                _sessionsController.SetInt(CookieNames._currentIndexName, 0);
-                currentIndex = _sessionsController.GetInt(CookieNames._currentIndexName);
-
+                _sessionsController.SetInt(SessionKeysNames._currentIndexName, 0);
+                currentIndex = _sessionsController.GetInt(SessionKeysNames._currentIndexName);
             }
             if (currentIndex < dbText.Count)
             {
                 var nextText = dbText[(int)currentIndex];
                 currentIndex++;
-                _sessionsController.SetInt(CookieNames._currentIndexName, (int)currentIndex);
+                _sessionsController.SetInt(SessionKeysNames._currentIndexName, (int)currentIndex);
                 return nextText;
             }
             else
@@ -39,20 +38,29 @@ namespace DeadIt.Controllers
         public DBImages GetImage(string characterName)
         {
             var dbImages = _deadItDBContext._images.ToList();
-           
+
             DBImages currentImage = dbImages.FirstOrDefault(img => Path.GetFileNameWithoutExtension(img.ImageName) == characterName);
-            if (currentImage != null) 
+
+            if ((currentImage != null) && (currentImage.ImageName != SessionKeysNames._currentImageName))
             {
+                _sessionsController.SetString(SessionKeysNames._currentImageName, currentImage.ImageName);
                 return currentImage;
             }
-
-            return null;
+            return currentImage;
         }
 
+        public Tuple<DBText, DBImages> UpdateAllInfo()
+        {
+            var dbText = UpdateText();
+            var dbImage = GetImage("Felix");
+            return Tuple.Create(dbText, dbImage);
+        }
         public interface IDataBaseController
         {
             public DBImages GetImage(string characterName);
             public DBText UpdateText();
+            public Tuple<DBText, DBImages> UpdateAllInfo();
+
         }
     }
 }

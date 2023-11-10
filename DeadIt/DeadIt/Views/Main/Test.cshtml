@@ -1,0 +1,55 @@
+﻿@model Tuple<DBText, DBImages>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<input type="button" id="updateTextButton" value="Обновить текст и имя" />
+
+    <p>Текст: <span id="text"></span></p>
+    <p>Имя: <span id="name"></span></p>
+    <div id="imageContainer"></div>
+
+<script>
+    $(document).ready(function () {
+        var intervalIdText;
+
+        $("#updateTextButton").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Main/ConcreteTest",
+                dataType: "json",
+                success: function (data) {
+                    var text = data.item1._Text;
+                    var name = data.item1._CharacterName;
+                    var image = data.item2.ImageData;
+
+                    var textSpan = $("#text");
+                    var nameSpan = $("#name");
+                    var currentIndexText = 0;
+
+                    clearInterval(intervalIdText);
+
+                    nameSpan.text(name);
+
+                    intervalIdText = setInterval(function () {
+                        if (currentIndexText < text.length) {
+                            textSpan.text(text.substring(0, currentIndexText + 1));
+                            currentIndexText++;
+                        } else {
+                            clearInterval(intervalIdText);
+                        }
+                    }, 40);
+
+                    if (image != null) {
+                        var imgElement = $("<img>").attr("src", "data:image/png;base64," + btoa(String.fromCharCode.apply(null, image))).attr("alt", "Image");
+                        imageContainer.html(imgElement);
+                    } else {
+                        imageContainer.html("<p>No image available</p>");
+                    }
+                },
+                error: function () {
+                    alert("Произошла ошибка при выполнении запроса!!");
+                }
+            });
+        });
+    });
+</script>

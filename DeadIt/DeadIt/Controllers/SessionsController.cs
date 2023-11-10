@@ -21,6 +21,16 @@ namespace DeadIt.Controllers
             var variable = _httpContextAccessor.HttpContext.Session.GetInt32(key); 
             return variable;
         }
+
+        public void SetString(string key, string value)
+        {
+            _httpContextAccessor.HttpContext.Session.SetString(key, value);
+        }
+
+        public string GetString(string key)
+        {
+            return _httpContextAccessor.HttpContext.Session.GetString(key);
+        }
     }
 }
 
@@ -28,4 +38,8 @@ public interface ISessionsController
 {
     public void SetInt(string key, int variable);
     public int? GetInt(string key);
+    public void SetString(string key, string value);
+     public string GetString(string key);
+
+
 }
