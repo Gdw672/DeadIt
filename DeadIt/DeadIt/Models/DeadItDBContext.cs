@@ -30,8 +30,8 @@ namespace DeadIt.Models
     {
         [Key]
         public int ID { get; set; }
-        public string ImageName { get; set; } = "";
-        public byte[] ImageData { get; set; }
+        public string _ImageName { get; set; } = "";
+        public byte[] _ImageData { get; set; }
     }
 
     public interface IDeadItDBContext

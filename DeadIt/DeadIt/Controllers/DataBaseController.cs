@@ -39,27 +39,34 @@ namespace DeadIt.Controllers
         {
             var dbImages = _deadItDBContext._images.ToList();
 
-            DBImages currentImage = dbImages.FirstOrDefault(img => Path.GetFileNameWithoutExtension(img.ImageName) == characterName);
+            DBImages currentImage = dbImages.FirstOrDefault(img => Path.GetFileNameWithoutExtension(img._ImageName) == characterName);
 
-            if ((currentImage != null) && (currentImage.ImageName != SessionKeysNames._currentImageName))
-            {
-                _sessionsController.SetString(SessionKeysNames._currentImageName, currentImage.ImageName);
+           _sessionsController.SetString(SessionKeysNames._currentImageName, currentImage._ImageName);
                 return currentImage;
-            }
-            return currentImage;
+            
         }
 
-        public Tuple<DBText, DBImages> UpdateAllInfo()
+       /* public Tuple<DBText, DBImages> UpdateAllInfo()
+        {
+            var dbImage = GetImage("Felix");
+            var dbText = UpdateText();
+            return Tuple.Create(dbText, dbImage);
+        }*/
+
+
+        public ContentInfoFromDB UpdateAllInfo2()
         {
             var dbText = UpdateText();
             var dbImage = GetImage("Felix");
-            return Tuple.Create(dbText, dbImage);
+
+            return new ContentInfoFromDB(dbText, dbImage);
         }
         public interface IDataBaseController
         {
             public DBImages GetImage(string characterName);
             public DBText UpdateText();
-            public Tuple<DBText, DBImages> UpdateAllInfo();
+            public ContentInfoFromDB UpdateAllInfo2();
+
 
         }
     }

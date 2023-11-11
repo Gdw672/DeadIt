@@ -1,12 +1,16 @@
-﻿@model Tuple<DBText, DBImages>
+﻿@model ContentInfoFromDB
+
+@{
+    ViewData["Title"] = "TestUpdate";
+}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <input type="button" id="updateTextButton" value="Обновить текст и имя" />
 
-    <p>Текст: <span id="text"></span></p>
-    <p>Имя: <span id="name"></span></p>
-    <div id="imageContainer"></div>
+<p>Текст: <span id="text"></span></p>
+<p>Имя: <span id="name"></span></p>
+<div id="imageContainer"></div>
 
 <script>
     $(document).ready(function () {
@@ -18,12 +22,14 @@
                 url: "/Main/ConcreteTest",
                 dataType: "json",
                 success: function (data) {
-                    var text = data.item1._Text;
-                    var name = data.item1._CharacterName;
-                    var image = data.item2.ImageData;
+                    var text = data.text._Text;
+                    var name = data.text._CharacterName;
+                    var image = data.image._ImageData;
 
                     var textSpan = $("#text");
                     var nameSpan = $("#name");
+                    var $imageContainer = $("#imageContainer");
+
                     var currentIndexText = 0;
 
                     clearInterval(intervalIdText);
@@ -39,12 +45,7 @@
                         }
                     }, 40);
 
-                    if (image != null) {
-                        var imgElement = $("<img>").attr("src", "data:image/png;base64," + btoa(String.fromCharCode.apply(null, image))).attr("alt", "Image");
-                        imageContainer.html(imgElement);
-                    } else {
-                        imageContainer.html("<p>No image available</p>");
-                    }
+                    createImageContainer(image, $imageContainer);
                 },
                 error: function () {
                     alert("Произошла ошибка при выполнении запроса!!");
@@ -52,4 +53,14 @@
             });
         });
     });
-</script>
+
+    function createImageContainer(imageData, container) {
+        if (imageData && imageData.length > 0) {
+            var imgElement = $("<img>").attr("src", "data:image/png;base64," + imageData).attr("alt", "Image");
+            container.html(imgElement);
+        } else {
+            container.html("<p>No image available</p>");
+        }
+    }
+
+    </script>

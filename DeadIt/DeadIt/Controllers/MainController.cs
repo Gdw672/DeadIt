@@ -22,16 +22,9 @@ namespace DeadIt.Controllers
 
         public IActionResult ConcreteTest()
         {
-
-            var nextText = _dataBaseController.UpdateAllInfo();
-            if (nextText != null)
-            {
-                return Json(nextText);
-            }
-            else
-            {
-                return Json(new DBText { _Text = "За индексом!" });
-            }
+            var nextText = _dataBaseController.UpdateAllInfo2();
+         
+            return Json(nextText);
         }
     }
 }
