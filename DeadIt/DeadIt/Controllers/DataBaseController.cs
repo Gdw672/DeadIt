@@ -41,23 +41,19 @@ namespace DeadIt.Controllers
 
             DBImages currentImage = dbImages.FirstOrDefault(img => Path.GetFileNameWithoutExtension(img._ImageName) == characterName);
 
-           _sessionsController.SetString(SessionKeysNames._currentImageName, currentImage._ImageName);
+            if(currentImage != null && currentImage._ImageName != SessionKeysNames._currentImageName)
+            {
+                _sessionsController.SetString(SessionKeysNames._currentImageName, currentImage._ImageName);
                 return currentImage;
-            
+            }
+            else
+                return new DBImages("There's no image");
+          
         }
-
-       /* public Tuple<DBText, DBImages> UpdateAllInfo()
-        {
-            var dbImage = GetImage("Felix");
-            var dbText = UpdateText();
-            return Tuple.Create(dbText, dbImage);
-        }*/
-
-
         public ContentInfoFromDB UpdateAllInfo2()
         {
             var dbText = UpdateText();
-            var dbImage = GetImage("Felix");
+            var dbImage = GetImage(dbText._CharacterName);
 
             return new ContentInfoFromDB(dbText, dbImage);
         }

@@ -28,6 +28,10 @@ namespace DeadIt.Models
 
     public class DBImages
     {
+        public DBImages(string imageName)
+        {
+        _ImageName = imageName;
+        }
         [Key]
         public int ID { get; set; }
         public string _ImageName { get; set; } = "";
