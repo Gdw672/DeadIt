@@ -39,7 +39,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Main}/{action=Test}/{id?}");
+    pattern: "{controller=Main}/{action=MainTitle}/{id?}");
 
 //app.MapGet("/", (DeadItDBContext db) => db._textDBs.Select(x => x._CharacterName).ToList());
 

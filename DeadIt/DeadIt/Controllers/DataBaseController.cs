@@ -1,4 +1,5 @@
 ﻿using DeadIt.Models;
+using System.Collections;
 using static DeadIt.Controllers.DataBaseController;
 
 namespace DeadIt.Controllers
@@ -48,9 +49,35 @@ namespace DeadIt.Controllers
             }
             else
                 return new DBImages("There's no image");
-          
         }
-        public ContentInfoFromDB UpdateAllInfo2()
+
+        public IEnumerable<DBChoices> GetChoices()
+        {
+            var currentChoice = _sessionsController.GetInt(SessionKeysNames._currentChoiceBlock);
+            var dbChoices = _deadItDBContext._choices.ToList();
+
+            if (currentChoice == null)
+            {
+                _sessionsController.SetInt(SessionKeysNames._currentChoiceBlock, 1);
+                currentChoice = _sessionsController.GetInt(SessionKeysNames._currentChoiceBlock);
+            }
+
+            if (currentChoice < dbChoices.Count)
+            {
+                var results = dbChoices.Where(entity => entity.EType == "Choice" && entity.ChoiceID == currentChoice);
+                return results;
+            }
+            else
+                return null;
+        }
+
+        public DBChoices TestChoice()
+        {
+            var dbChoice = _deadItDBContext._choices.FirstOrDefault();
+            return dbChoice;
+        }
+
+        public ContentInfoFromDB UpdateAllInfo()
         {
             var dbText = UpdateText();
             var dbImage = GetImage(dbText._CharacterName);
@@ -61,7 +88,11 @@ namespace DeadIt.Controllers
         {
             public DBImages GetImage(string characterName);
             public DBText UpdateText();
-            public ContentInfoFromDB UpdateAllInfo2();
+            public IEnumerable<DBChoices> GetChoices();
+
+
+            public DBChoices TestChoice();
+            public ContentInfoFromDB UpdateAllInfo();
 
 
         }

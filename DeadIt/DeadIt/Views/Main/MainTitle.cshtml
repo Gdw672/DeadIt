@@ -1,0 +1,68 @@
+﻿@model ContentInfoFromDB
+
+@{
+    ViewData["Title"] = "TestUpdate";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<input type="button" id="updateTextButton" value="Обновить текст и имя" />
+
+<p>Текст: <span id="text"></span></p>
+<p>Имя: <span id="name"></span></p>
+<div id="imageContainer"></div>
+
+<script>
+    $(document).ready(function () {
+        var intervalIdText;
+
+        $("#updateTextButton").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Main/ConcreteTest",
+                dataType: "json",
+                success: function (data) {
+                    var text = data.text._Text;
+                    var name = data.text._CharacterName;
+                    var image = data.image._ImageData;
+
+                    var textSpan = $("#text");
+                    var nameSpan = $("#name");
+                    var $imageContainer = $("#imageContainer");
+
+                    console.log(data.text._IsNextChoice);
+
+                    var currentIndexText = 0;
+
+                    clearInterval(intervalIdText);
+
+                    nameSpan.text(name);
+
+                    intervalIdText = setInterval(function () {
+                        if (currentIndexText < text.length) {
+                            textSpan.text(text.substring(0, currentIndexText + 1));
+                            currentIndexText++;
+                        } else {
+                            clearInterval(intervalIdText);
+                        }
+                    }, 40);
+
+                    createImageContainer(image, $imageContainer);
+                },
+                error: function () {
+                    alert("Произошла ошибка при выполнении запроса!!");
+                }
+            });
+        });
+    });
+
+    function createImageContainer(imageData, container) {
+        if (imageData && imageData.length > 0) {
+            var imgElement = $("<img>").attr("src", "data:image/png;base64," + imageData).attr("alt", "Image");
+            container.html(imgElement);
+        } else {
+            container.html("<p>No image available</p>");
+        }
+    }
+
+    </script>

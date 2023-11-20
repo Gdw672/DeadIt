@@ -15,14 +15,19 @@ namespace DeadIt.Controllers
             _dataBaseController = dataBaseController;
         }
 
-        public IActionResult Test()
+        public IActionResult MainTitle()
         {
             return View();
         }
 
+        public IActionResult Test()
+        {
+            return View(_dataBaseController.GetChoices());
+        }
+
         public IActionResult ConcreteTest()
         {
-            var nextText = _dataBaseController.UpdateAllInfo2();
+            var nextText = _dataBaseController.UpdateAllInfo();
          
             return Json(nextText);
         }
