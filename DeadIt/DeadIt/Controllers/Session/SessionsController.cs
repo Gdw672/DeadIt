@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Razor.Language.Intermediate;
-using Microsoft.Extensions.Caching.Distributed;
-using System.Collections.Generic;
-
-namespace DeadIt.Controllers
+﻿namespace DeadIt.Controllers
 {
     public class SessionsController : ISessionsController
     {

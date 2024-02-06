@@ -1,4 +1,4 @@
-﻿namespace DeadIt.Models
+﻿namespace DeadIt.Models.DatabaseModel
 {
     public class DBText
     {

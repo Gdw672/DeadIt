@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using DeadIt.Models.DatabaseModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeadIt.Models
 {
@@ -13,6 +12,7 @@ namespace DeadIt.Models
         public DeadItDBContext(DbContextOptions options) : base(options) 
         {
         }
+        
         public DeadItDBContext() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

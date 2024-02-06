@@ -1,6 +1,6 @@
 ﻿using DeadIt.Models;
 using Microsoft.AspNetCore.Mvc;
-using static DeadIt.Controllers.DataBaseController;
+using static DeadIt.Controllers.Database.DataBaseController;
 
 namespace DeadIt.Controllers
 {

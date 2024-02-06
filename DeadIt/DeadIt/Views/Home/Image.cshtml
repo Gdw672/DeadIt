@@ -1,8 +1,6 @@
-﻿@model Tuple<DBText, DBImages>
+﻿@model DeadIt.Models.DatabaseModel.ContentInfoFromDB
 @{
     ViewData["Title"] = "Imagine";
 }
 
 <h1>Imagine</h1>
-
-<img src="data:image/png;base64,@Convert.ToBase64String(Model.Item2._ImageData)" alt="Image" />

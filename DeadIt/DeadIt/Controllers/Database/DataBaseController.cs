@@ -1,10 +1,9 @@
 ﻿using DeadIt.Models;
-using System.Collections;
-using static DeadIt.Controllers.DataBaseController;
+using DeadIt.Models.DatabaseModel;
 
-namespace DeadIt.Controllers
+namespace DeadIt.Controllers.Database
 {
-    public class DataBaseController : IDataBaseController
+    public class DataBaseController : DataBaseController.IDataBaseController
     {
         private readonly IDeadItDBContext _deadItDBContext;
         private readonly ISessionsController _sessionsController;
@@ -18,11 +17,13 @@ namespace DeadIt.Controllers
         {
             var currentIndex = _sessionsController.GetInt(SessionKeysNames._currentIndexName);
             var dbText = _deadItDBContext._textDBs.ToList();
+            
             if (currentIndex == null)
             {
                 _sessionsController.SetInt(SessionKeysNames._currentIndexName, 0);
                 currentIndex = _sessionsController.GetInt(SessionKeysNames._currentIndexName);
             }
+            
             if (currentIndex < dbText.Count)
             {
                 var nextText = dbText[(int)currentIndex];
@@ -30,6 +31,7 @@ namespace DeadIt.Controllers
                 _sessionsController.SetInt(SessionKeysNames._currentIndexName, (int)currentIndex);
                 return nextText;
             }
+            
             else
             {
                 return null;
@@ -42,13 +44,13 @@ namespace DeadIt.Controllers
 
             DBImages currentImage = dbImages.FirstOrDefault(img => Path.GetFileNameWithoutExtension(img._ImageName) == characterName);
 
-            if(currentImage != null && currentImage._ImageName != SessionKeysNames._currentImageName)
+            if (currentImage != null && currentImage._ImageName != SessionKeysNames._currentImageName)
             {
                 _sessionsController.SetString(SessionKeysNames._currentImageName, currentImage._ImageName);
                 return currentImage;
             }
-            else
-                return new DBImages("There's no image");
+            
+            return new DBImages("There's no image");
         }
 
         public IEnumerable<DBChoices> GetChoices()
@@ -67,6 +69,7 @@ namespace DeadIt.Controllers
                 var results = dbChoices.Where(entity => entity.EType == "Choice" && entity.ChoiceID == currentChoice);
                 return results;
             }
+            
             else
                 return null;
         }
@@ -74,6 +77,7 @@ namespace DeadIt.Controllers
         public DBChoices TestChoice()
         {
             var dbChoice = _deadItDBContext._choices.FirstOrDefault();
+            
             return dbChoice;
         }
 
@@ -84,17 +88,14 @@ namespace DeadIt.Controllers
 
             return new ContentInfoFromDB(dbText, dbImage);
         }
+        
         public interface IDataBaseController
         {
             public DBImages GetImage(string characterName);
             public DBText UpdateText();
             public IEnumerable<DBChoices> GetChoices();
-
-
             public DBChoices TestChoice();
             public ContentInfoFromDB UpdateAllInfo();
-
-
         }
     }
 }

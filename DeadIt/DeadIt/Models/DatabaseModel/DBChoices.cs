@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DeadIt.Models
+namespace DeadIt.Models.DatabaseModel
 {
     public class DBChoices
     {
@@ -9,6 +9,7 @@ namespace DeadIt.Models
         public string Text { get; set; } = "";
         public string EType { get; set; } = "";
         public int ChoiceID { get; set; }
+        
         public int NextChoiceID { get; set; }
     }
 
@@ -17,7 +18,6 @@ namespace DeadIt.Models
         None,
         Text,
         Choice
-
     }
 }
 

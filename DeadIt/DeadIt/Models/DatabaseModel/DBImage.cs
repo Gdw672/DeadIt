@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DeadIt.Models
+namespace DeadIt.Models.DatabaseModel
 {
     public class DBImages
     {

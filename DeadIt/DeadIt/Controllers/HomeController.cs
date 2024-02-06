@@ -1,9 +1,7 @@
 ﻿using DeadIt.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using System.Diagnostics;
-using System.Web;
-using static DeadIt.Controllers.DataBaseController;
+using static DeadIt.Controllers.Database.DataBaseController;
 
 namespace DeadIt.Controllers
 {
@@ -16,11 +14,7 @@ namespace DeadIt.Controllers
             _logger = logger;
             _dataBaseController = dataBaseController;
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
         public IActionResult TestUpdate()
         {
             return View();
@@ -50,12 +44,6 @@ namespace DeadIt.Controllers
             {
                 return Json(new { message = "За индексом!" });
             }
-        }
-
-
-        public ActionResult Image() 
-        {
-                return View(_dataBaseController.GetImage("Felix"));
         }
     }
 }
