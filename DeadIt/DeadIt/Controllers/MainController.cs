@@ -20,11 +20,6 @@ namespace DeadIt.Controllers
             return View();
         }
 
-        public IActionResult Test()
-        {
-            return View(_dataBaseController.GetChoices());
-        }
-
         public IActionResult ConcreteTest()
         {
             var nextText = _dataBaseController.UpdateAllInfo();

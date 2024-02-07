@@ -32,10 +32,7 @@ namespace DeadIt.Controllers.Database
                 return nextText;
             }
             
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public DBImages GetImage(string characterName)
@@ -53,25 +50,12 @@ namespace DeadIt.Controllers.Database
             return new DBImages("There's no image");
         }
 
-        public IEnumerable<DBChoices> GetChoices()
+        public IEnumerable<DBChoices> GetChoices(int choiceId)
         {
-            var currentChoice = _sessionsController.GetInt(SessionKeysNames._currentChoiceBlock);
             var dbChoices = _deadItDBContext._choices.ToList();
-
-            if (currentChoice == null)
-            {
-                _sessionsController.SetInt(SessionKeysNames._currentChoiceBlock, 1);
-                currentChoice = _sessionsController.GetInt(SessionKeysNames._currentChoiceBlock);
-            }
-
-            if (currentChoice < dbChoices.Count)
-            {
-                var results = dbChoices.Where(entity => entity.EType == "Choice" && entity.ChoiceID == currentChoice);
-                return results;
-            }
             
-            else
-                return null;
+            var results = dbChoices.Where(entity => entity.EType == "Choice" && entity.ChoiceID == choiceId);
+            return results;
         }
 
         public DBChoices TestChoice()
@@ -86,14 +70,21 @@ namespace DeadIt.Controllers.Database
             var dbText = UpdateText();
             var dbImage = GetImage(dbText._CharacterName);
 
-            return new ContentInfoFromDB(dbText, dbImage);
+            if (dbText._NextChoiceID == 0)
+            {
+                return new ContentInfoFromDB(dbText, dbImage);
+            }
+
+            var dbChoice = GetChoices(dbText._NextChoiceID);
+            
+            return new ContentInfoFromDB(dbText, dbImage, dbChoice);
         }
         
         public interface IDataBaseController
         {
             public DBImages GetImage(string characterName);
             public DBText UpdateText();
-            public IEnumerable<DBChoices> GetChoices();
+            public IEnumerable<DBChoices> GetChoices(int choiceId);
             public DBChoices TestChoice();
             public ContentInfoFromDB UpdateAllInfo();
         }

@@ -37,7 +37,6 @@ namespace DeadIt.Controllers
             var nextText = _dataBaseController.UpdateText();
             if (nextText != null) 
             {
-                //DataBaseController.TryUpdateImage();
                 return Json(nextText);
             }
             else

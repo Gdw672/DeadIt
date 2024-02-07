@@ -8,6 +8,7 @@ namespace DeadIt.Models.DatabaseModel
         {
             _ImageName = imageName;
         }
+        
         [Key]
         public int ID { get; set; }
         public string _ImageName { get; set; } = "";

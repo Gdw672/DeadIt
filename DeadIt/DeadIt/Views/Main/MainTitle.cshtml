@@ -14,7 +14,13 @@
 
 <script>
     $(document).ready(function () {
-        var intervalIdText;
+        var intervalIdText;    
+        
+        var choice1Button = $("<button>").text("Выбор 1").hide();                  
+        var choice2Button = $("<button>").text("Выбор 2").hide();
+        
+        $("body").append(choice1Button);
+        $("body").append(choice2Button);
 
         $("#updateTextButton").click(function () {
             $.ajax({
@@ -30,13 +36,11 @@
                     var nameSpan = $("#name");
                     var $imageContainer = $("#imageContainer");
 
-                    if (data.text._IsNextChoice) 
+                    if (data.text._NextChoiceID != 0) 
                     {
-                        SpawnChoiceButton();
-                        
-                        console.log("Spawn choices from db.....")
+                        SpawnChoiceButton(data.choice, choice1Button, choice2Button);
                     }
-
+                    
                     var currentIndexText = 0;
 
                     clearInterval(intervalIdText);
@@ -70,12 +74,24 @@
         }
     }
     
- function SpawnChoiceButton() 
+ function SpawnChoiceButton(data, button1, button2) 
  {
-        var choice1Button = $("<button>").text("Выбор 1");
-        var choice2Button = $("<button>").text("Выбор 2");
-
-        $("body").append(choice1Button);
-        $("body").append(choice2Button);
+        data.forEach(function (item, index)
+        {
+            if (index < 2) 
+            {
+                if (index == 0)
+                {
+                    button1.show();
+                    button1.text(item.text);
+                }
+                
+                if (index == 1)
+                {
+                    button2.show();
+                    button2.text(item.text);
+                }
+            }
+        });
  }
     </script>
