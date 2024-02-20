@@ -2,7 +2,7 @@
 {
     public class ContentInfoFromDB
     {
-        public ContentInfoFromDB(DBText text, DBImages image, IEnumerable<DBChoices> choice = null) 
+        public ContentInfoFromDB(DBText text = null, DBImages image = null, IEnumerable<DBChoices> choice = null) 
         {
            Text = text;
            Image = image;

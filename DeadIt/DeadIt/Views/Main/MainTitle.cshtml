@@ -25,7 +25,7 @@
         $("#updateTextButton").click(function () {
             $.ajax({
                 type: "GET",
-                url: "/Main/ConcreteTest",
+                url: "/Main/NextTextWithoutChoice",
                 dataType: "json",
                 success: function (data) {
                     var text = data.text._Text;
@@ -82,16 +82,39 @@
             {
                 if (index == 0)
                 {
+                   button1.click(function () {
+                   CallNextTextFromChoice(2);
+                   });
+                    
                     button1.show();
                     button1.text(item.text);
                 }
                 
                 if (index == 1)
                 {
+                     button2.click(function () {
+                      CallNextTextFromChoice(3);
+                     });
+                    
                     button2.show();
                     button2.text(item.text);
                 }
             }
         });
  }
+ 
+ function CallNextTextFromChoice(nextChoiceID) {
+     $.ajax({
+         type: "POST",
+         url: "/Main/NextTextFromChoice",
+         data: { nextChoiceID: nextChoiceID }, 
+         dataType: "json",
+         success: function (response) {
+         },
+         error: function () {
+             
+         }
+     });
+ }
+
     </script>

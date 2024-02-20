@@ -1,5 +1,6 @@
 using DeadIt.Controllers;
 using DeadIt.Controllers.Database;
+using DeadIt.Controllers.Database.Interface;
 using DeadIt.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -10,9 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<IDeadItDBContext, DeadItDBContext>();
-builder.Services.AddTransient<ISessionsController, SessionsController>();
-builder.Services.AddTransient<IDataBaseController, DataBaseController>();
+SetupTransient();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
@@ -23,11 +23,9 @@ builder.Services.AddDbContext<DeadItDBContext>(options => options.UseSqlServer("
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -42,6 +40,13 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Main}/{action=MainTitle}/{id?}");
 
-//app.MapGet("/", (DeadItDBContext db) => db._textDBs.Select(x => x._CharacterName).ToList());
-
 app.Run();
+
+void SetupTransient()
+{
+    builder.Services.AddTransient<IDeadItDBContext, DeadItDBContext>();
+    builder.Services.AddTransient<ISessionsController, SessionsController>();
+    builder.Services.AddTransient<IDataBaseController, DataBaseController>();
+    builder.Services.AddTransient<IDatabaseChoiceController, DatabaseChoiceController>();
+    builder.Services.AddTransient<IDatabaseNoChoiceController, DatabaseNoChoiceController>();
+}

@@ -1,6 +1,6 @@
-﻿using DeadIt.Models;
+﻿using DeadIt.Controllers.Database.Interface;
+using DeadIt.Models.DatabaseModel;
 using Microsoft.AspNetCore.Mvc;
-using static DeadIt.Controllers.Database.DataBaseController;
 
 namespace DeadIt.Controllers
 {
@@ -20,11 +20,27 @@ namespace DeadIt.Controllers
             return View();
         }
 
-        public IActionResult ConcreteTest()
+        public IActionResult NextTextWithoutChoice()
         {
-            var nextText = _dataBaseController.UpdateAllInfo();
+            var nextText = _dataBaseController.UpdateAllInfoWithoutChoice();
          
             return Json(nextText);
+        }
+
+        [HttpPost]
+        public IActionResult  NextTextFromChoice(int nextChoiceID)
+        {
+            var nextText = _dataBaseController.UpdateAllInfoWithChoice(nextChoiceID);
+
+            Console.WriteLine(nextText);
+
+            return Json(nextText);
+        }
+
+        public async Task<IActionResult> Log()
+        {
+            Console.WriteLine("Test!!!");
+            return Ok();
         }
     }
 }

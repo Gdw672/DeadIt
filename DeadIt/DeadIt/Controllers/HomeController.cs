@@ -1,6 +1,7 @@
 ﻿using DeadIt.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using DeadIt.Controllers.Database.Interface;
 using static DeadIt.Controllers.Database.DataBaseController;
 
 namespace DeadIt.Controllers
@@ -30,11 +31,11 @@ namespace DeadIt.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
+        
         public ActionResult UpdateText()
         {
-            var nextText = _dataBaseController.UpdateText();
+            var nextText = _dataBaseController.UpdateAllInfoWithoutChoice();
+            
             if (nextText != null) 
             {
                 return Json(nextText);
