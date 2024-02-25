@@ -1,5 +1,6 @@
 using DeadIt.Controllers.Database.Interface;
 using DeadIt.Models;
+using DeadIt.Models.ContentFromDB;
 using DeadIt.Models.DatabaseModel;
 
 namespace DeadIt.Controllers.Database;
@@ -37,19 +38,19 @@ public class DatabaseNoChoiceController : IDatabaseNoChoiceController
         return null;
     }
     
-    public ContentInfoFromDB UpdateAllInfo()
+    public ContentInfoFromDb UpdateAllInfo()
     {
         var dbText = UpdateText();
         var dbImage = GetImage(dbText._CharacterName);
 
         if (dbText._NextChoiceID == 0)
         {
-            return new ContentInfoFromDB(dbText, dbImage);
+            return new ContentInfoFromDb(dbText, dbImage);
         }
 
         var dbChoice = GetChoices(dbText._NextChoiceID);
             
-        return new ContentInfoFromDB(dbText, dbImage, dbChoice);
+        return new ContentInfoFromDb(dbText, dbImage, dbChoice);
     }
     
     public DBImages GetImage(string characterName)

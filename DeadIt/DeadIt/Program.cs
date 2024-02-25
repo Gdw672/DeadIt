@@ -1,10 +1,11 @@
 using DeadIt.Controllers;
 using DeadIt.Controllers.Database;
 using DeadIt.Controllers.Database.Interface;
+using DeadIt.Controllers.Database.Main;
 using DeadIt.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using static DeadIt.Controllers.Database.DataBaseController;
+using static DeadIt.Controllers.Database.Main.DataBaseController;
 
 var builder = WebApplication.CreateBuilder(args);
 

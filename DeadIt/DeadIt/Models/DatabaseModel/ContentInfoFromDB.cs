@@ -1,8 +1,8 @@
 ﻿namespace DeadIt.Models.DatabaseModel
 {
-    public class ContentInfoFromDB
+    public class ContentInfoFromDb
     {
-        public ContentInfoFromDB(DBText text = null, DBImages image = null, IEnumerable<DBChoices> choice = null) 
+        public ContentInfoFromDb(DBText text = null, DBImages image = null, IEnumerable<DBChoices> choice = null) 
         {
            Text = text;
            Image = image;

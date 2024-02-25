@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using DeadIt.Controllers.Database.Interface;
-using static DeadIt.Controllers.Database.DataBaseController;
+using static DeadIt.Controllers.Database.Main.DataBaseController;
 
 namespace DeadIt.Controllers
 {

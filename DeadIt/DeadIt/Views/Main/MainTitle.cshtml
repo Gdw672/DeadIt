@@ -1,4 +1,4 @@
-﻿@model DeadIt.Models.DatabaseModel.ContentInfoFromDB
+﻿@model DeadIt.Models.DatabaseModel.ContentInfoFromDb
 
 @{
     ViewData["Title"] = "TestUpdate";
@@ -8,8 +8,8 @@
 
 <input type="button" id="updateTextButton" value="Обновить текст и имя" />
 
-<p>Текст: <span id="text"></span></p>
-<p>Имя: <span id="name"></span></p>
+<p>Text: <span id="text"></span></p>
+<p>Name: <span id="name"></span></p>
 <div id="imageContainer"></div>
 
 <script>
@@ -21,8 +21,10 @@
         
         $("body").append(choice1Button);
         $("body").append(choice2Button);
+        
+        $("#updateTextButton").click(UpdateText);
 
-        $("#updateTextButton").click(function () {
+        function UpdateText() {
             $.ajax({
                 type: "GET",
                 url: "/Main/NextTextWithoutChoice",
@@ -31,22 +33,22 @@
                     var text = data.text._Text;
                     var name = data.text._CharacterName;
                     var image = data.image._ImageData;
-
+        
                     var textSpan = $("#text");
                     var nameSpan = $("#name");
                     var $imageContainer = $("#imageContainer");
-
-                    if (data.text._NextChoiceID != 0) 
-                    {
+        
+                    if (data.text._NextChoiceID != 0) {
+                        $("#updateTextButton").hide();
                         SpawnChoiceButton(data.choice, choice1Button, choice2Button);
                     }
-                    
+        
                     var currentIndexText = 0;
-
+        
                     clearInterval(intervalIdText);
-
+        
                     nameSpan.text(name);
-
+        
                     intervalIdText = setInterval(function () {
                         if (currentIndexText < text.length) {
                             textSpan.text(text.substring(0, currentIndexText + 1));
@@ -55,66 +57,88 @@
                             clearInterval(intervalIdText);
                         }
                     }, 40);
-
+        
                     CreateImageContainer(image, $imageContainer);
                 },
                 error: function () {
                     alert("Произошла ошибка при выполнении запроса!!");
                 }
             });
-        });
-    });
-
-    function CreateImageContainer(imageData, container) {
-        if (imageData && imageData.length > 0) {
-            var imgElement = $("<img>").attr("src", "data:image/png;base64," + imageData).attr("alt", "Image");
-            container.html(imgElement);
-        } else {
-            container.html("<p>No image available</p>");
         }
-    }
-    
- function SpawnChoiceButton(data, button1, button2) 
- {
-        data.forEach(function (item, index)
-        {
-            if (index < 2) 
-            {
-                if (index == 0)
-                {
-                   button1.click(function () {
-                   CallNextTextFromChoice(2);
-                   });
-                    
-                    button1.show();
-                    button1.text(item.text);
-                }
-                
-                if (index == 1)
-                {
-                     button2.click(function () {
-                      CallNextTextFromChoice(3);
-                     });
-                    
-                    button2.show();
-                    button2.text(item.text);
-                }
-            }
-        });
- }
- 
- function CallNextTextFromChoice(nextChoiceID) {
-     $.ajax({
-         type: "POST",
-         url: "/Main/NextTextFromChoice",
-         data: { nextChoiceID: nextChoiceID }, 
-         dataType: "json",
-         success: function (response) {
-         },
-         error: function () {
-             
-         }
-     });
- }
 
-    </script>
+        function CreateImageContainer(imageData, container) {
+            if (imageData && imageData.length > 0) {
+                var imgElement = $("<img>").attr("src", "data:image/png;base64," + imageData).attr("alt", "Image");
+                container.html(imgElement);
+            } else {
+                container.html("<p>No image available</p>");
+            }
+        }
+
+        function SpawnChoiceButton(data, button1, button2) {
+            data.forEach(function (item, index) {
+                if (index < 2) {
+                    if (index === 0) {
+                        button1.click(function () {
+                            CallNextTextFromChoice(item.nextChoiceID);
+                        });
+                        button1.show().text(item.text);
+                    }
+                    
+                    if (index === 1) {
+                        button2.click(function () {
+                            CallNextTextFromChoice(item.nextChoiceID);
+                        });
+                        button2.show().text(item.text);
+                    }
+                }
+            });
+        }
+        
+        function CallNextTextFromChoice(nextChoiceID) {
+            $.ajax({
+                type: "POST",
+                url: "/Main/NextTextFromChoice",
+                data: { nextChoiceID: nextChoiceID }, 
+                dataType: "json",
+                success: function (data) {
+                    var text = data.choice.text;
+                    var name = data.choice.characterName;
+                    var image = data.image._ImageData;
+                             
+                    var textSpan = $("#text");
+                    var nameSpan = $("#name");
+                    var $imageContainer = $("#imageContainer");
+                             
+                    var currentIndexText = 0;
+                             
+                    clearInterval(intervalIdText);
+                             
+                    nameSpan.text(name);
+                             
+                    intervalIdText = setInterval(function () {
+                        if (currentIndexText < text.length) {
+                             textSpan.text(text.substring(0, currentIndexText + 1));
+                             currentIndexText++;
+                          } else {
+                             clearInterval(intervalIdText);
+                          }
+                    }, 40);
+                    
+                    if (data.choice.nextChoiceID == 0)
+                    {
+                     choice1Button.hide();
+                     choice2Button.hide();
+                        
+                     $("#updateTextButton").show();
+                    }
+                             
+                    CreateImageContainer(image, $imageContainer);
+                },
+                error: function () {
+                    alert("Произошла ошибка при выполнении запроса!!");
+                }
+            });
+        }
+    });
+</script>

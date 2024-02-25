@@ -1,8 +1,8 @@
 ﻿using DeadIt.Controllers.Database.Interface;
-using DeadIt.Models;
+using DeadIt.Models.ContentFromDB;
 using DeadIt.Models.DatabaseModel;
 
-namespace DeadIt.Controllers.Database
+namespace DeadIt.Controllers.Database.Main
 {
     public class DataBaseController : IDataBaseController
     {
@@ -15,14 +15,14 @@ namespace DeadIt.Controllers.Database
             _databaseChoiceController = databaseChoiceController;
         }
         
-        public ContentInfoFromDB UpdateAllInfoWithoutChoice()
+        public ContentInfoFromDb UpdateAllInfoWithoutChoice()
         {
             var nextContent = _databaseNoChoiceController.UpdateAllInfo();
 
             return nextContent;
         }
         
-        public string UpdateAllInfoWithChoice(int nextChoiceID)
+        public ContentBase UpdateAllInfoWithChoice(int nextChoiceID)
         {
             var nextContent = _databaseChoiceController.UpdateAllInfo(nextChoiceID);
 

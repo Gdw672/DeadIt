@@ -11,6 +11,8 @@ namespace DeadIt.Models.DatabaseModel
         public int ChoiceID { get; set; }
         
         public int NextChoiceID { get; set; }
+
+        public string CharacterName { get; set; } = "";
     }
 
     public enum EChoiceType

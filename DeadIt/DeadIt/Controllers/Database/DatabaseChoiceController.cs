@@ -1,5 +1,6 @@
 using DeadIt.Controllers.Database.Interface;
 using DeadIt.Models;
+using DeadIt.Models.ContentFromDB;
 using DeadIt.Models.DatabaseModel;
 
 namespace DeadIt.Controllers.Database;
@@ -13,12 +14,28 @@ public class DatabaseChoiceController : IDatabaseChoiceController
         _deadItDBContext = deadItDBContext;
     }
 
-    public string UpdateAllInfo(int nextChoiceID)
+    public ContentBase UpdateAllInfo(int nextChoiceID)
     {
         var dbChoices = _deadItDBContext._choices.ToList();
 
-        var text = dbChoices.First(choice => choice.ChoiceID == nextChoiceID && choice.EType == "Text");
+        var choice = dbChoices.First(choice => choice.ChoiceID == nextChoiceID && choice.EType == "Text");
 
-        return text.Text;
+        var image = GetImage(choice.CharacterName);
+
+        return new ContentBase(choice, image);
+    }
+    
+    public DBImages GetImage(string characterName)
+    {
+        var dbImages = _deadItDBContext._images.ToList();
+
+        DBImages currentImage = dbImages.FirstOrDefault(img => Path.GetFileNameWithoutExtension(img._ImageName) == characterName);
+
+        if (currentImage != null)
+        {
+            return currentImage;
+        }
+            
+        return new DBImages("There's no image");
     }
 }
