@@ -12,8 +12,10 @@ namespace DeadIt.Models
         public DeadItDBContext(DbContextOptions options) : base(options) 
         {
         }
-        
-        public DeadItDBContext() { }
+
+        public DeadItDBContext()
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,7 +27,5 @@ namespace DeadIt.Models
         public DbSet<DBText> _textDBs { get; set; }
         public DbSet<DBImages> _images { get; set; }
         public DbSet<DBChoices> _choices { get; set; }
-
-        public int SaveChanges();
     }
 }

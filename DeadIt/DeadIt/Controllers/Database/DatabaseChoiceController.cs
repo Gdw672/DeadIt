@@ -35,7 +35,7 @@ public class DatabaseChoiceController : IDatabaseChoiceController
         {
             return currentImage;
         }
-            
+        
         return new DBImages("There's no image");
     }
 }

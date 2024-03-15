@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test React</title>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="/react/react.development.js"></script>
+<script src="/react-dom/react-dom.development.js"></script>
+
+<script>
+    // Создаем React-компонент без использования JSX
+    class HelloReact extends React.Component {
+        render() {
+            return React.createElement('h1', null, 'Hello, React!');
+        }
+    }
+
+    // Монтируем React-компонент на страницу
+    ReactDOM.render(
+        React.createElement(HelloReact, null),
+        document.getElementById('root')
+    );
+</script>
+</body>
+</html>

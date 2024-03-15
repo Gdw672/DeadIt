@@ -17,6 +17,11 @@ namespace DeadIt.Controllers
             return View();
         }
 
+        public IActionResult TestReact()
+        {
+            return View();
+        }
+
         public IActionResult NextTextWithoutChoice()
         {
             var nextText = _dataBaseController.UpdateAllInfoWithoutChoice();

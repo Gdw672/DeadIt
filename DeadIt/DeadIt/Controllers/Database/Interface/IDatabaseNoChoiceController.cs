@@ -1,4 +1,3 @@
-using DeadIt.Models.ContentFromDB;
 using DeadIt.Models.DatabaseModel;
 
 namespace DeadIt.Controllers.Database.Interface;

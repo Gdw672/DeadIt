@@ -5,6 +5,7 @@ using DeadIt.Controllers.Database.Main;
 using DeadIt.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using static DeadIt.Controllers.Database.Main.DataBaseController;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +32,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+SetupStaticFiles();
+
+Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory + "dsdsdfdsf");
+
 app.UseSession();
 app.UseRouting();
 
@@ -50,4 +55,24 @@ void SetupTransient()
     builder.Services.AddTransient<IDataBaseController, DataBaseController>();
     builder.Services.AddTransient<IDatabaseChoiceController, DatabaseChoiceController>();
     builder.Services.AddTransient<IDatabaseNoChoiceController, DatabaseNoChoiceController>();
+}
+
+//ToDo: разобраться с путем к проекту, чтобы не указывать путь целиком.
+void SetupStaticFiles()
+{
+    app.UseStaticFiles();
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine("D:\\DeadIt\\DeadIt\\dead-it-react-app\\node_modules\\react\\umd")),
+        RequestPath = "/react"
+    });
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine("D:\\DeadIt\\DeadIt\\dead-it-react-app\\node_modules\\react-dom\\umd")),
+        RequestPath = "/react-dom"
+    });
 }
