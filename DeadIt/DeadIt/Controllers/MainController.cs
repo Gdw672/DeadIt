@@ -21,7 +21,8 @@ namespace DeadIt.Controllers
         {
             return View();
         }
-
+        
+        [HttpGet]
         public IActionResult NextTextWithoutChoice()
         {
             var nextText = _dataBaseController.UpdateAllInfoWithoutChoice();

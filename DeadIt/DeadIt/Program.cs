@@ -9,6 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using static DeadIt.Controllers.Database.Main.DataBaseController;
 
 var builder = WebApplication.CreateBuilder(args);
+var Origins = "dead-it-react-app";
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -18,6 +19,13 @@ SetupTransient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+
+builder.Services.AddCors(options =>
+    options.AddPolicy(Origins, policy =>
+    {
+        policy.WithOrigins("https://localhost:7252/").AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+        policy.WithOrigins("http://localhost:3000/").AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+    }));
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -35,10 +43,9 @@ app.UseHttpsRedirection();
 
 SetupStaticFiles();
 
-Console.WriteLine(AppDomain.CurrentDomain.BaseDirectory + "dsdsdfdsf");
-
 app.UseSession();
 app.UseRouting();
+app.UseCors(Origins);
 
 app.UseAuthorization();
 
