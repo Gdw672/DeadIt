@@ -16,25 +16,27 @@ public class DatabaseNoChoiceController : IDatabaseNoChoiceController
         _sessionsController = sessionsController;
     }
     
-    public DBText UpdateText()
+    
+    //ToDO: сделать нормальное сохранение индекса
+    private DBText UpdateText()
     {
-        var currentIndex = _sessionsController.GetInt(SessionKeysNames._currentIndexName);
+        var currentIndex = _sessionsController.GetIntForReact();
         var dbText = _deadItDBContext._textDBs.ToList();
-            
+        
         if (currentIndex == null)
         {
-            _sessionsController.SetInt(SessionKeysNames._currentIndexName, 0);
-            currentIndex = _sessionsController.GetInt(SessionKeysNames._currentIndexName);
+            _sessionsController.SetIntForReact(0);
+            currentIndex = _sessionsController.GetIntForReact();
         }
-            
+        
         if (currentIndex < dbText.Count)
         {
             var nextText = dbText[(int)currentIndex];
             currentIndex++;
-            _sessionsController.SetInt(SessionKeysNames._currentIndexName, (int)currentIndex);
+            _sessionsController.SetIntForReact((int)currentIndex); // Сохранение текущего индекса в сессии
             return nextText;
         }
-            
+        
         return null;
     }
     

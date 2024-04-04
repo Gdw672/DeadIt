@@ -5,8 +5,6 @@ using DeadIt.Controllers.Database.Main;
 using DeadIt.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.FileProviders;
-using static DeadIt.Controllers.Database.Main.DataBaseController;
 
 var builder = WebApplication.CreateBuilder(args);
 var Origins = "dead-it-react-app";
@@ -68,18 +66,4 @@ void SetupTransient()
 void SetupStaticFiles()
 {
     app.UseStaticFiles();
-
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(
-            Path.Combine("D:\\DeadIt\\DeadIt\\dead-it-react-app\\node_modules\\react\\umd")),
-        RequestPath = "/react"
-    });
-
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(
-            Path.Combine("D:\\DeadIt\\DeadIt\\dead-it-react-app\\node_modules\\react-dom\\umd")),
-        RequestPath = "/react-dom"
-    });
 }

@@ -3,6 +3,7 @@
     public class SessionsController : ISessionsController
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        public static int? index;
         public SessionsController(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -16,6 +17,16 @@
         {
             var variable = _httpContextAccessor.HttpContext.Session.GetInt32(key); 
             return variable;
+        }
+
+        public void SetIntForReact(int value)
+        {
+            index = value;
+        }
+
+        public int? GetIntForReact()
+        {
+            return index;
         }
 
         public void SetString(string key, string value)
@@ -34,8 +45,12 @@ public interface ISessionsController
 {
     public void SetInt(string key, int variable);
     public int? GetInt(string key);
+
+    public void SetIntForReact(int value);
+    
+    public int? GetIntForReact();
+    
     public void SetString(string key, string value);
-     public string GetString(string key);
 
 
 }

@@ -14,12 +14,5 @@ namespace DeadIt.Models.DatabaseModel
 
         public string CharacterName { get; set; } = "";
     }
-
-    public enum EChoiceType
-    {
-        None,
-        Text,
-        Choice
-    }
 }
 

@@ -1,5 +1,7 @@
-﻿using DeadIt.Controllers.Database.Interface;
+﻿using System.Net;
+using DeadIt.Controllers.Database.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace DeadIt.Controllers
 {
@@ -17,25 +19,23 @@ namespace DeadIt.Controllers
             return View();
         }
 
-        public IActionResult TestReact()
-        {
-            return View();
-        }
-        
         [HttpGet]
         public IActionResult NextTextWithoutChoice()
         {
-            var nextText = _dataBaseController.UpdateAllInfoWithoutChoice();
-         
-            return Json(nextText);
+           var nextText = _dataBaseController.UpdateAllInfoWithoutChoice();
+
+           return Json(nextText);
         }
 
-        [HttpPost]
-        public IActionResult NextTextFromChoice(int nextChoiceID)
+        [HttpPost] 
+        public IActionResult NextTextFromChoice([FromBody] NextChoiceRequest nextChoiceID)
         {
-            var nextText = _dataBaseController.UpdateAllInfoWithChoice(nextChoiceID);
+            var nextText = _dataBaseController.UpdateAllInfoWithChoice(nextChoiceID.Id);
 
             return Json(nextText);
         }
+        
+        public record NextChoiceRequest(int Id);    
+
     }
 }

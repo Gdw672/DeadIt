@@ -22,4 +22,9 @@
     <Folder Include="Content\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Home\Privacy.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\TestUpdate.cshtml" />
+  </ItemGroup>
+
 </Project>

@@ -25,7 +25,7 @@ public class DatabaseChoiceController : IDatabaseChoiceController
         return new ContentBase(choice, image);
     }
     
-    public DBImages GetImage(string characterName)
+    private DBImages GetImage(string characterName)
     {
         var dbImages = _deadItDBContext._images.ToList();
 
