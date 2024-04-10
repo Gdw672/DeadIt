@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 var Origins = "dead-it-react-app";
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 SetupTransient();

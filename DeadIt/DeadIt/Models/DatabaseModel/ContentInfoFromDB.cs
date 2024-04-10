@@ -10,7 +10,6 @@
         }
         public DBText Text { get; set; }
         public DBImages Image { get; set; }
-        
         public IEnumerable<DBChoices> Choice { get; set; }
     }
 

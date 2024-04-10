@@ -36,6 +36,5 @@ namespace DeadIt.Controllers
         }
         
         public record NextChoiceRequest(int Id);    
-
     }
 }

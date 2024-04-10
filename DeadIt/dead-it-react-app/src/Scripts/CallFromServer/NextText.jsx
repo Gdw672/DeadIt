@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const MyComponent = () => {
+const NextText = () => {
     const [text, setText] = useState('');
     const [name, setName] = useState('');
     const [image, setImage] = useState('');
@@ -17,7 +17,7 @@ const MyComponent = () => {
                 setName(data.text._CharacterName);
                 setImage(data.image._ImageData);
 
-                if (data.text._NextChoiceID != 0) {
+                if (data.text._NextChoiceID !== 0) {
                     setNextTextButton(true);
                     setChoice(data.choice);
                 }
@@ -39,18 +39,15 @@ const MyComponent = () => {
                 setName(data.choice.characterName);
                 setImage(data.image._ImageData);
                 console.log(data.choice);
-                if(data.choice.nextChoiceID == 0) {
+                if (data.choice.nextChoiceID === 0) {
                     setChoicesButton(true);
                     setNextTextButton(false);
-                    console.log("There must be off")
                 }
             })
             .catch(error => {
-                console.log(nextChoiceID);
                 console.error('Error:', error);
             });
     }
-
 
     return (
         <div>
@@ -64,7 +61,7 @@ const MyComponent = () => {
             {choiceInfo && choiceInfo.map((choice, index) => {
                 return (
                     <div key={index}>
-                        <button 
+                        <button
                             onClick={() => CallNextTextFromChoice(choice.nextChoiceID)} disabled={choicesButton}>{choice.text}</button>
                     </div>
                 );
@@ -73,4 +70,4 @@ const MyComponent = () => {
     );
 }
 
-export default MyComponent; 
+export default NextText;

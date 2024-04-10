@@ -16,7 +16,6 @@ public class DatabaseNoChoiceController : IDatabaseNoChoiceController
         _sessionsController = sessionsController;
     }
     
-    
     //ToDO: сделать нормальное сохранение индекса
     private DBText UpdateText()
     {
