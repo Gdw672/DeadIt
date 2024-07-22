@@ -1,10 +1,10 @@
 ﻿namespace DeadIt.Controllers
 {
-    public class SessionsController : ISessionsController
+    public class SessionService : ISessionService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         public static int? index;
-        public SessionsController(IHttpContextAccessor httpContextAccessor)
+        public SessionService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
@@ -41,7 +41,7 @@
     }
 }
 
-public interface ISessionsController
+public interface ISessionService
 {
     public void SetInt(string key, int variable);
     public int? GetInt(string key);

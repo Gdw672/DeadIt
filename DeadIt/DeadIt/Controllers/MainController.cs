@@ -7,9 +7,9 @@ namespace DeadIt.Controllers
 {
     public class MainController : Controller
     {
-        private readonly IDataBaseController _dataBaseController;
+        private readonly IDataBaseService _dataBaseController;
 
-        public MainController (IDataBaseController dataBaseController)
+        public MainController (IDataBaseService dataBaseController)
         {
             _dataBaseController = dataBaseController;
         }

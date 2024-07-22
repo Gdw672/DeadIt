@@ -3,7 +3,7 @@ using DeadIt.Models.DatabaseModel;
 
 namespace DeadIt.Controllers.Database.Interface;
 
-public interface IDataBaseController
+public interface IDataBaseService
 { 
         public ContentInfoFromDb UpdateAllInfoWithoutChoice();
         public ContentBase UpdateAllInfoWithChoice(int nextChoiceID);
