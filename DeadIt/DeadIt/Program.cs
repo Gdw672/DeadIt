@@ -55,10 +55,10 @@ app.Run();
 void SetupTransient()
 {
     builder.Services.AddTransient<IDeadItDBContext, DeadItDBContext>();
-    builder.Services.AddTransient<ISessionsController, SessionsController>();
-    builder.Services.AddTransient<IDataBaseController, DataBaseController>();
-    builder.Services.AddTransient<IDatabaseChoiceController, DatabaseChoiceController>();
-    builder.Services.AddTransient<IDatabaseNoChoiceController, DatabaseNoChoiceController>();
+    builder.Services.AddTransient<ISessionService, SessionService>();
+    builder.Services.AddTransient<IDataBaseService, DataBaseService>();
+    builder.Services.AddTransient<IDatabaseChoiceService, DatabaseChoiceService>();
+    builder.Services.AddTransient<IDatabaseNoChoiceService, DatabaseNoChoiceService>();
 }
 
 //ToDo: разобраться с путем к проекту, чтобы не указывать путь целиком.

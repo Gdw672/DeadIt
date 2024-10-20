@@ -4,12 +4,12 @@ using DeadIt.Models.DatabaseModel;
 
 namespace DeadIt.Controllers.Database.Main
 {
-    public class DataBaseController : IDataBaseController
+    public class DataBaseService : IDataBaseService
     {
-        private readonly IDatabaseNoChoiceController _databaseNoChoiceController;
-        private readonly IDatabaseChoiceController _databaseChoiceController;
+        private readonly IDatabaseNoChoiceService _databaseNoChoiceController;
+        private readonly IDatabaseChoiceService _databaseChoiceController;
         
-        public DataBaseController(IDatabaseNoChoiceController databaseNoChoiceController, IDatabaseChoiceController databaseChoiceController)
+        public DataBaseService(IDatabaseNoChoiceService databaseNoChoiceController, IDatabaseChoiceService databaseChoiceController)
         {
             _databaseNoChoiceController = databaseNoChoiceController;
             _databaseChoiceController = databaseChoiceController;

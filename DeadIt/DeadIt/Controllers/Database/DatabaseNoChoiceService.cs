@@ -5,12 +5,12 @@ using DeadIt.Models.DatabaseModel;
 
 namespace DeadIt.Controllers.Database;
 
-public class DatabaseNoChoiceController : IDatabaseNoChoiceController
+public class DatabaseNoChoiceService : IDatabaseNoChoiceService
 {
     private readonly IDeadItDBContext _deadItDBContext;
-    private readonly ISessionsController _sessionsController;
+    private readonly ISessionService _sessionsController;
     
-    public DatabaseNoChoiceController(IDeadItDBContext deadItDBContext, ISessionsController sessionsController)
+    public DatabaseNoChoiceService(IDeadItDBContext deadItDBContext, ISessionService sessionsController)
     {
         _deadItDBContext = deadItDBContext;
         _sessionsController = sessionsController;

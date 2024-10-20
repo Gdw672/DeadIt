@@ -5,11 +5,11 @@ using DeadIt.Models.DatabaseModel;
 
 namespace DeadIt.Controllers.Database;
 
-public class DatabaseChoiceController : IDatabaseChoiceController
+public class DatabaseChoiceService : IDatabaseChoiceService
 {
     private readonly IDeadItDBContext _deadItDBContext;
 
-    public DatabaseChoiceController(IDeadItDBContext deadItDBContext)
+    public DatabaseChoiceService(IDeadItDBContext deadItDBContext)
     {
         _deadItDBContext = deadItDBContext;
     }
