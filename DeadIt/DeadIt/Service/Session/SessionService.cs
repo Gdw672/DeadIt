@@ -1,4 +1,4 @@
-﻿namespace DeadIt.Controllers
+﻿namespace DeadIt.Service.Session
 {
     public class SessionService : ISessionService
     {
@@ -15,7 +15,7 @@
 
         public int? GetInt(string key)
         {
-            var variable = _httpContextAccessor.HttpContext.Session.GetInt32(key); 
+            var variable = _httpContextAccessor.HttpContext.Session.GetInt32(key);
             return variable;
         }
 
@@ -47,9 +47,9 @@ public interface ISessionService
     public int? GetInt(string key);
 
     public void SetIntForReact(int value);
-    
+
     public int? GetIntForReact();
-    
+
     public void SetString(string key, string value);
 
 

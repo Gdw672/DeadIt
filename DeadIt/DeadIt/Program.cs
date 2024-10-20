@@ -1,8 +1,10 @@
-using DeadIt.Controllers;
-using DeadIt.Controllers.Database;
-using DeadIt.Controllers.Database.Interface;
-using DeadIt.Controllers.Database.Main;
 using DeadIt.Models;
+using DeadIt.Service.Database;
+using DeadIt.Service.Database.Interface;
+using DeadIt.Service.Database.Main;
+using DeadIt.Service.Images;
+using DeadIt.Service.Images.Interface;
+using DeadIt.Service.Session;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -56,9 +58,11 @@ void SetupTransient()
 {
     builder.Services.AddTransient<IDeadItDBContext, DeadItDBContext>();
     builder.Services.AddTransient<ISessionService, SessionService>();
+
     builder.Services.AddTransient<IDataBaseService, DataBaseService>();
     builder.Services.AddTransient<IDatabaseChoiceService, DatabaseChoiceService>();
     builder.Services.AddTransient<IDatabaseNoChoiceService, DatabaseNoChoiceService>();
+    builder.Services.AddScoped<IBackgroundService, DeadIt.Service.Images.BackgroundService>();
 }
 
 //ToDo: разобраться с путем к проекту, чтобы не указывать путь целиком.

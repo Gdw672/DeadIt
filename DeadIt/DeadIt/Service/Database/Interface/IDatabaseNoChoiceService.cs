@@ -1,6 +1,6 @@
 using DeadIt.Models.DatabaseModel;
 
-namespace DeadIt.Controllers.Database.Interface;
+namespace DeadIt.Service.Database.Interface;
 
 public interface IDatabaseNoChoiceService
 {

@@ -1,9 +1,9 @@
-using DeadIt.Controllers.Database.Interface;
 using DeadIt.Models;
 using DeadIt.Models.ContentFromDB;
 using DeadIt.Models.DatabaseModel;
+using DeadIt.Service.Database.Interface;
 
-namespace DeadIt.Controllers.Database;
+namespace DeadIt.Service.Database;
 
 public class DatabaseChoiceService : IDatabaseChoiceService
 {
@@ -24,7 +24,7 @@ public class DatabaseChoiceService : IDatabaseChoiceService
 
         return new ContentBase(choice, image);
     }
-    
+
     private DBImages GetImage(string characterName)
     {
         var dbImages = _deadItDBContext._images.ToList();
@@ -35,7 +35,7 @@ public class DatabaseChoiceService : IDatabaseChoiceService
         {
             return currentImage;
         }
-        
+
         return new DBImages("There's no image");
     }
 }

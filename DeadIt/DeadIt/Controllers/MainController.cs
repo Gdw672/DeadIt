@@ -1,5 +1,6 @@
 ﻿using System.Net;
-using DeadIt.Controllers.Database.Interface;
+using DeadIt.Service.Database.Interface;
+using DeadIt.Service.Images.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -8,10 +9,12 @@ namespace DeadIt.Controllers
     public class MainController : Controller
     {
         private readonly IDataBaseService _dataBaseController;
+        private readonly IBackgroundService _backgroundService;
 
-        public MainController (IDataBaseService dataBaseController)
+        public MainController (IDataBaseService dataBaseController, IBackgroundService backgroundService)
         {
             _dataBaseController = dataBaseController;
+            _backgroundService = backgroundService;
         }
 
         public IActionResult MainTitle()
@@ -34,7 +37,15 @@ namespace DeadIt.Controllers
 
             return Json(nextText);
         }
-        
+
+        [HttpGet]
+        public IActionResult GetBackground()
+        {
+            var fileBytes = _backgroundService.Getbackground();
+            var string64 = Convert.ToBase64String(fileBytes);
+            return Ok(string64);
+        }
+
         public record NextChoiceRequest(int Id);    
     }
 }
