@@ -67,13 +67,10 @@ const NextText = () => {
             <input type="button" value="Update name and text" onClick={UpdateText} disabled={nextTextButton} />
             <p className="text">Текст: {text}</p>
             <p>Имя: {name}</p>
-            <div>
-                {image ? <img src={`data:image/png;base64,${image}`} alt="Image"/> :
+            <div class="image-container">
+                {image ? <img src={`data:image/png;base64,${image}`} alt="Image" class="character"/> :
                     <p>Изображение недоступно</p>}
-            </div>
-
-            <div>
-                {background ? <img src={`data:image/jpeg;base64,${background}`} alt="Background image"/> :
+                {background ? <img src={`data:image/jpeg;base64,${background}`} alt="Background image" class="background"/> :
                 <p>Задний фон недоступен</p>
             }
 

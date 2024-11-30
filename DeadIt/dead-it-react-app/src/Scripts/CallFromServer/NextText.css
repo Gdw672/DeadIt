@@ -1,8 +1,41 @@
 ﻿
+
+.image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
 .text {
     color: #00BFFF;
 }
 
 .name {
     color: #591a1a;
+}
+
+.image-container {
+    position: relative;
+    width: 1280px;
+    height: 750px;
+    overflow: hidden;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    z-index: -1;
+}
+
+.character {
+    position: absolute;
+    top: 60%; /* Центрирование по вертикали */
+    left: 20%; /* Центрирование по горизонтали */
+    transform: translate(-50%, -50%) scale(0.8); /* Смещение к центру контейнера */
+    max-width: 100%; /* Настройка ширины относительно контейнера */
+    z-index: 1; /* Выше фона */
 }
