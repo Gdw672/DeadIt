@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>DeatIt_CreationContentService</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="dead-it-content-creation-react-app\**" />
+    <Content Remove="dead-it-content-creation-react-app\**" />
+    <EmbeddedResource Remove="dead-it-content-creation-react-app\**" />
+    <None Remove="dead-it-content-creation-react-app\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+</Project>
