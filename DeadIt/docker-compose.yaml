@@ -1,0 +1,12 @@
+services:
+
+  DeadIt:
+    build:
+      context: ./DeadIt  
+      dockerfile: Dockerfile
+    image: deadit-deadit
+    ports:
+      - "7525:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+

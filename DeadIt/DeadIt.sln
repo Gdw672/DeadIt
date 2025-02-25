@@ -28,24 +28,30 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "dead-it-react-app(1)", "dea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeatIt-CreationContentService", "DeatIt-CreationContentService\DeatIt-CreationContentService.csproj", "{ECD1215F-777B-4393-9E72-6F0CB377F798}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "dead-it-content-creation-react-app", "DeatIt-CreationContentService\dead-it-content-creation-react-app\", "{A4472677-6604-461B-8B97-9C23043630B2}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "dead-it-content-creation-react-app(1)", "dead-it-content-creation-react-app\", "{5005ECC2-BD73-4C22-B6B2-24E33DC88CED}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_65348"
-		Debug.AspNetCompiler.PhysicalPath = "DeatIt-CreationContentService\dead-it-content-creation-react-app\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_65348\"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_49529"
+		Debug.AspNetCompiler.PhysicalPath = "dead-it-content-creation-react-app\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49529\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_65348"
-		Release.AspNetCompiler.PhysicalPath = "DeatIt-CreationContentService\dead-it-content-creation-react-app\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_65348\"
+		Release.AspNetCompiler.VirtualPath = "/localhost_49529"
+		Release.AspNetCompiler.PhysicalPath = "dead-it-content-creation-react-app\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_49529\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "65348"
+		VWDPort = "49529"
+		SlnRelativePath = "dead-it-content-creation-react-app\"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5908A9B6-92BF-4EF2-A22F-47EC3717F868}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yaml = docker-compose.yaml
 	EndProjectSection
 EndProject
 Global
@@ -66,10 +72,10 @@ Global
 		{ECD1215F-777B-4393-9E72-6F0CB377F798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECD1215F-777B-4393-9E72-6F0CB377F798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECD1215F-777B-4393-9E72-6F0CB377F798}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4472677-6604-461B-8B97-9C23043630B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4472677-6604-461B-8B97-9C23043630B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4472677-6604-461B-8B97-9C23043630B2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4472677-6604-461B-8B97-9C23043630B2}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{5005ECC2-BD73-4C22-B6B2-24E33DC88CED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5005ECC2-BD73-4C22-B6B2-24E33DC88CED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5005ECC2-BD73-4C22-B6B2-24E33DC88CED}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{5005ECC2-BD73-4C22-B6B2-24E33DC88CED}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
