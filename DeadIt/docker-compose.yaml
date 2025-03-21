@@ -9,4 +9,12 @@ services:
       - "7525:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-
+  DeadIt-ContentCreation:
+    build:
+     context: ./DeatIt-CreationContentService
+     dockerfile: Dockerfile
+    image: deadit-deadit-content-creation
+    ports:
+     - "7526:8080"
+    environment:
+     - ASPNETCORE_ENVIRONMENT=Development

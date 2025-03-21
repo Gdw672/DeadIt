@@ -6,7 +6,7 @@
         const [text, setText] = useState('');
 
         const testRequest = () => {
-            axios.get("http://localhost:5181/api/ContentCreation/GetAnswer")
+            axios.get("http://localhost:7526/api/ContentCreation/GetAnswer")
                 .then(response => {
                     setText(response.data);
                 })
