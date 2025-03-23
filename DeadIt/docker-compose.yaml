@@ -18,3 +18,46 @@ services:
      - "7526:8080"
     environment:
      - ASPNETCORE_ENVIRONMENT=Development
+  DeadIt-ContentCreation-React-App: 
+    build:
+     context: ./dead-it-content-creation-react-app
+     dockerfile: Dockerfile
+    image: deadit-content-creation-react-app
+    ports:
+      - "3000:3000"
+    volumes:
+     - ./dead-it-content-creation-react-app:/app
+    environment:
+      NODE_ENV: development
+    stdin_open: true
+    tty: true
+    command: npm start
+  DeadIt-React-App: 
+    build:
+     context: ./dead-it-react-app
+     dockerfile: Dockerfile
+    image: deadit-react-app
+    ports:
+      - "3001:3000"
+    volumes:
+     - ./dead-it-react-app:/app
+    environment:
+      NODE_ENV: development
+    stdin_open: true
+    tty: true
+    command: npm start
+  mssql:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: mssql_container
+    ports:
+      - "1434:1433"
+    environment:
+      SA_PASSWORD: "Lord3009!"
+      ACCEPT_EULA: "Y"
+    restart: always
+    volumes:
+    - mssql_data:/var/opt/mssql
+    - C:/mssql_data:/var/opt/mssql/data
+    - /c/DeadIt - db:/backup
+volumes:
+  mssql_data:

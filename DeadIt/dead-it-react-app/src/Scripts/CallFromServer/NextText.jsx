@@ -12,7 +12,7 @@ const NextText = () => {
     const [choiceInfo, setChoice] = useState(null);
 
     const UpdateText = () => {
-        axios.get('https://localhost:7252/Main/NextTextWithoutChoice')
+        axios.get('http://localhost:7525/Main/NextTextWithoutChoice')
             .then(response => {
                 GetBackground();
                 const data = response.data;
@@ -31,7 +31,7 @@ const NextText = () => {
     }
 
     const GetBackground = () => {
-        axios.get('https://localhost:7252/Main/GetBackground')
+        axios.get('http://localhost:7525/Main/GetBackground')
             .then(response => {
                 const data = response.data;
                 setBackground(data);
@@ -41,7 +41,7 @@ const NextText = () => {
     }
 
     const CallNextTextFromChoice = (nextChoiceID) => {
-        axios.post('https://localhost:7252/Main/NextTextFromChoice', { id: nextChoiceID }, {
+        axios.post('http://localhost:7525/Main/NextTextFromChoice', { id: nextChoiceID }, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -67,13 +67,11 @@ const NextText = () => {
             <input type="button" value="Update name and text" onClick={UpdateText} disabled={nextTextButton} />
             <p className="text">Текст: {text}</p>
             <p>Имя: {name}</p>
-            <div class="image-container">
-                {image ? <img src={`data:image/png;base64,${image}`} alt="Image" class="character"/> :
+            <div className="image-container">
+                {image ? <img src={`data:image/png;base64,${image}`} alt="Image" className="character" /> :
                     <p>Изображение недоступно</p>}
-                {background ? <img src={`data:image/jpeg;base64,${background}`} alt="Background image" class="background"/> :
-                <p>Задний фон недоступен</p>
-            }
-
+                {background ? <img src={`data:image/jpeg;base64,${background}`} alt="Background image" className="background" /> :
+                    <p>Задний фон недоступен</p>}
             </div>
             {choiceInfo && choiceInfo.map((choice, index) => {
                 return (

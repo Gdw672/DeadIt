@@ -24,12 +24,13 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://localhost:7252/").AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
         policy.WithOrigins("http://localhost:3000/").AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+        policy.WithOrigins("http://localhost:3001/").AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
     }));
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddDbContext<DeadItDBContext>(options => options.UseSqlServer("Server = NANOMACHINE; Database = DeadIt; Trusted_Connection=True; TrustServerCertificate=true;"));
-
+builder.Services.AddDbContext<DeadItDBContext>(options =>
+    options.UseSqlServer("Server=mssql,1433; Database=DeadIt; User Id=sa; Password=Lord3009!; TrustServerCertificate=True;"));
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

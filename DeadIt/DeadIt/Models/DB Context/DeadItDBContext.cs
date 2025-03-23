@@ -19,7 +19,7 @@ namespace DeadIt.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server = NANOMACHINE; Database = DeadIt; Trusted_Connection=True; TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("Server=mssql,1433; Database = DeadIt; User Id = sa; Password = Lord3009!; TrustServerCertificate = True;");
         }
     }
     public interface IDeadItDBContext
