@@ -1,4 +1,5 @@
 .speech-background {
+    position:relative;
     width: 250px;
     height: 150px;
     background-color: navajowhite;
@@ -60,4 +61,12 @@
     background-color: gray;
     border: none;
     cursor: pointer;
+}
+.speech-checkbox-is-first {
+    position: absolute;
+    left: 80%;
+    bottom: 80%;
+    z-index: 100;
+    width: 16px;
+    height: 16px;
 }

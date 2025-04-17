@@ -1,7 +1,16 @@
 import './Styles/Speech.css';
+import React, { useState, useEffect } from 'react';
 
 const Speech = ({ style, number, onClickAnchor }) => {
 
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleChange = (e) => {
+        console.log("Now ", e.target.checked);
+        setIsChecked(e.target.checked);
+    };
+
+  
     return <div style={style} className="speech-background">
         Speech#{number}
         <div className="speech-name-text">
@@ -16,7 +25,15 @@ const Speech = ({ style, number, onClickAnchor }) => {
             <input type="button" id={`${number}-right`} onClick={onClickAnchor} className="speech-anchor-button-right" />
             <input type="button" id={`${number}-left`} onClick={onClickAnchor} className="speech-anchor-button-left" />
         </div>
+        <div>
+            <div>
+                    <input type="checkbox" id={`${number}-checkbox`} className="speech-checkbox-is-first" onChange={handleChange} checked={isChecked}></input>
+            </div>
+        </div>
     </div>
+
+
+
 };
 
 export default Speech;

@@ -88,7 +88,7 @@ const ContentCreation = () => {
 
     useEffect(() => {
         console.log(numberSpeech);
-    }, [speeches], numberSpeech, [arrows]);
+    }, [speeches], [numberSpeech], [arrows]);
 
 
     return (
