@@ -13,40 +13,5 @@
     border: 1px solid black;
 }
 
-.speech-background {
-    width: 250px;
-    height: 150px;
-    background-color: navajowhite;
-    border: 1px solid black;
-}
 
-.speech-name-text {
-    position: absolute;
-    bottom: 20px;
-}
-.speech-input {
-    width: 70px;
-    height: 30px;
-    background-color: white;
-    border: 1px solid black;
-    display: block;
-    margin-left: 35px;
-    position: center;
-}
-
-.speech-button-next {
-    width: 70px;
-    height: 30px;
-}
-.speech-button-container {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    padding-right: 10px;
-}
 
