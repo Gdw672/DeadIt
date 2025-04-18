@@ -22,8 +22,8 @@ const Speech = ({ style, number, onClickAnchor }) => {
             <input type="button" value="choice" className="speech-button-next" />
         </div>
         <div>
-            <input type="button" id={`${number}-right`} onClick={onClickAnchor} className="speech-anchor-button-right" />
-            <input type="button" id={`${number}-left`} onClick={onClickAnchor} className="speech-anchor-button-left" />
+            <input type="button" id={`speech-anchor-${number}-right`} onClick={onClickAnchor} className="speech-anchor-button-right" />
+            <input type="button" id={`speech-anchor-${number}-left`} onClick={onClickAnchor} className="speech-anchor-button-left" />
         </div>
         <div>
             <div>

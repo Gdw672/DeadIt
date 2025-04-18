@@ -41,3 +41,27 @@
     right: 5%;
     top: 5%;
 }
+
+.choice-anchor-button-right {
+    position: absolute;
+    left: 101%;
+    top: 40%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: gray;
+    border: none;
+    cursor: pointer;
+}
+
+.choice-anchor-button-left {
+    position: absolute;
+    right: 101%;
+    top: 40%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: gray;
+    border: none;
+    cursor: pointer;
+}

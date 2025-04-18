@@ -100,17 +100,17 @@ const ContentCreation = () => {
         >
             {showMenu && <DynamicMenu style={{ top: spawnCoordianates.y, left: spawnCoordianates.x }} onSpawmSpeech={spawnSpeech} onSpawnChoice={spawnChoice}>Меню</DynamicMenu>}
 
-            {speeches.map((choice, index) => (
+            {speeches.map((speech, index) => (
                 <Speech
                     key={index}
-                    style={{ position: 'absolute', top: choice.coords.y, left: choice.coords.x }}
-                    number={choice.number}
+                    style={{ position: 'absolute', top: speech.coords.y, left: speech.coords.x }}
+                    number={speech.number}
                     onClickAnchor={buttonAttachArrowStart === null ? startArrowing : endArrowing}
                 />
             ))}
 
             {choices.map((choice, index) => (
-                <Choice key={index} style={{ position: 'absolute', top: choice.coords.y, left: choice.coords.x }} number={choice.number} />
+                <Choice key={index} style={{ position: 'absolute', top: choice.coords.y, left: choice.coords.x }} number={choice.number} onClickAnchor={buttonAttachArrowStart === null ? startArrowing : endArrowing} />
             ))}
 
             {arrows.map((arrow, index) => (
