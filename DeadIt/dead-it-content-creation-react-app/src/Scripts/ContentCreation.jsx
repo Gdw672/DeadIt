@@ -1,9 +1,10 @@
 ﻿import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DynamicMenu from './InterfaceComponents/DynamicMenu';
 import Speech from './InterfaceComponents/Speech';
 import Choice from './InterfaceComponents/Choice';
 import Xarrow from 'react-xarrows';
+import SendButton from './InterfaceComponents/SendButton';
 
 const ContentCreation = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -16,6 +17,8 @@ const ContentCreation = () => {
     const [buttonAttachArrowStart, setButtonAttachArrowStart] = useState(null);
 
     const [arrows, setArrows] = useState([]);
+
+    const refs = useRef({});
 
     const handleMouseMove = (e) => {
         if (showMenu === false) {
@@ -44,7 +47,6 @@ const ContentCreation = () => {
 
         const coords = { ...spawnCoordianates };
         const newNumber = numberChoice + 1;
-
 
         setNumberChoice(newNumber);
 
@@ -81,15 +83,79 @@ const ContentCreation = () => {
             ]);
         }
 
-        console.log(arrows);
-
         setButtonAttachArrowStart(null);
     }
 
-    useEffect(() => {
-        console.log(numberSpeech);
-    }, [speeches], [numberSpeech], [arrows]);
+    const sendData = () => {
 
+        const result = [];
+
+        speeches.forEach(({ number }) => {
+            const id = `speech-${number}`;
+            const nameInput = document.getElementById(`name-${number}-speech`);
+            const textInput = document.getElementById(`text-${number}-speech`);
+
+            const name = nameInput ? nameInput.value : "";
+            const text = textInput ? textInput.value : "";
+
+            const nextArrow = arrows.find(arrow => arrow.start === `speech-right-${number}-anchor` || arrow.start === `speech-left-${number}-anchort`);
+            let nextId = nextArrow ? nextArrow.end : null;
+
+            nextId = getCorrecttNextId(nextId);
+                
+            result.push({
+                id,
+                type: "speech",
+                name,
+                text,
+                nextId
+            });
+        });
+
+        choices.forEach(({ number }) => {
+            const id = `choice-${number}`;
+            const inputs = document.querySelectorAll(`#name-${number}-choice`);
+            const name = inputs[0] ? inputs[0].value : "";
+            const text = inputs[1] ? inputs[1].value : "";
+
+            const nextArrow = arrows.find(arrow => arrow.start === `choice-right-${number}-anchor` || arrow.start === `choice-left-${number}-anchor`);
+            let nextId = nextArrow ? nextArrow.end : null;
+            nextId = getCorrecttNextId(nextId);
+
+            result.push({
+                id,
+                type: "choice",
+                name,
+                text,
+                nextId
+            });
+        });
+
+        console.log("Resulting JSON:", JSON.stringify(result, null, 2));
+
+        axios.post('http://localhost:5181/api/ContentCreation/PostData', result, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                console.log('Success:', response.data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+    const getCorrecttNextId = (name) => {
+        if (name == null) {
+            return null;
+        }
+
+        let parts = name.split('-');
+
+        return `${parts[0]}-${parts[2]}`;
+    }
 
     return (
         <div
@@ -115,7 +181,10 @@ const ContentCreation = () => {
 
             {arrows.map((arrow, index) => (
                 <Xarrow key={index} start={arrow.start} end={arrow.end} />
-            ))}        </div>
+            ))}
+
+            <SendButton id="sendButton" onClick={sendData} />
+        </div>
     );
 };
 
