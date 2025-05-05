@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DeatIt_CreationContentService.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeatIt_CreationContentService.Controllers
@@ -7,10 +8,10 @@ namespace DeatIt_CreationContentService.Controllers
     [ApiController]
     public class ContentCreationController : ControllerBase
     {
-        [HttpGet("GetAnswer")]
-        public string GetAnswer()
+        [HttpPost("PostData")]
+        public IActionResult PostData([FromBody] List<object> data)
         {
-            return "answer is delivered.";
+            return Ok(new { message = "answer is delivered", data });
         }
     }
 }
