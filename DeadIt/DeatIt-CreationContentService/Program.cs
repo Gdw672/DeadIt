@@ -1,8 +1,14 @@
 using DeatIt_CreationContentService.Models.DB__Context;
+using DeatIt_CreationContentService.Service.Database;
+using DeatIt_CreationContentService.Service.Database.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 var builder = WebApplication.CreateBuilder(args);
 var Origins = "dead-it-content-creation-react-app";
+
+builder.Services.AddTransient<IContentCreationDBContext, ContentCreationDBContext>();
+builder.Services.AddTransient<IDatabaseInserterService, DatabaseInserterService>();
 
 
 builder.Services.AddControllers();
@@ -20,7 +26,9 @@ builder.Services.AddCors(options =>
     }));
 
 builder.Services.AddDbContext<ContentCreationDBContext>(options =>
-    options.UseSqlServer("Server=mssql,1433; Database=DeadItContentCreation; User Id=sa; Password=Lord3009!; TrustServerCertificate=True;"));
+    options.UseSqlServer(
+        "Server=localhost,1434; Database=DeadItContentCreation; User Id=sa; Password=Lord3009!; TrustServerCertificate=True;",
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 var app = builder.Build();
 

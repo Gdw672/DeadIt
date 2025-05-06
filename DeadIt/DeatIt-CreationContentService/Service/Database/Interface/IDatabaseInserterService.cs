@@ -2,5 +2,6 @@
 {
     public interface IDatabaseInserterService
     {
+        public string InsertInfo(List<object> data);
     }
 }

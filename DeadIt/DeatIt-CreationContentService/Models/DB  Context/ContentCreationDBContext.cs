@@ -13,7 +13,6 @@ namespace DeatIt_CreationContentService.Models.DB__Context
 
         public ContentCreationDBContext()
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,12 +21,18 @@ namespace DeatIt_CreationContentService.Models.DB__Context
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=mssql,1433; Database = DeadItContentCreation; User Id = sa; Password = Lord3009!; TrustServerCertificate = True;");
+            optionsBuilder.UseSqlServer("Server=localhost,1434; Database = DeadItContentCreation; User Id = sa; Password = Lord3009!; TrustServerCertificate = True;");
+        }
+
+        void IContentCreationDBContext.SaveChanges()
+        {
+            base.SaveChanges();
         }
     }
     public interface IContentCreationDBContext
     {
         public DbSet<DBText> textDBs { get; set; }
+        public void SaveChanges();
 
     }
 }
