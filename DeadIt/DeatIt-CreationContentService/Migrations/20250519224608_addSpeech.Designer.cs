@@ -3,6 +3,7 @@ using DeatIt_CreationContentService.Models.DB__Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeatIt_CreationContentService.Migrations
 {
     [DbContext(typeof(ContentCreationDBContext))]
-    partial class ContentCreationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250519224608_addSpeech")]
+    partial class addSpeech
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +46,7 @@ namespace DeatIt_CreationContentService.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("choiceDB", (string)null);
+                    b.ToTable("choiceDB");
                 });
 
             modelBuilder.Entity("DeatIt_CreationContentService.Models.DatabaseModel.DBSpeech", b =>
@@ -68,7 +71,7 @@ namespace DeatIt_CreationContentService.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("textDB", (string)null);
+                    b.ToTable("textDB");
                 });
 #pragma warning restore 612, 618
         }

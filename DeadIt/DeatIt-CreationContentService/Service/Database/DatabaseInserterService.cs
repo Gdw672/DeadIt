@@ -21,16 +21,38 @@ namespace DeatIt_CreationContentService.Service.Database
 
             var answers = MapData(jsonElement);
 
-            var entities = answers.Select(a => new DBText
+            var speeches = new List<AnswerData>();
+            var choices = new List<AnswerData>();
+
+            foreach (var item in answers)
+            {
+                if (item.Type == "speech")
+                    speeches.Add(item);
+                else 
+                    choices.Add(item);
+            }
+
+            var entitiesSpeech = speeches.Select(a => new DBSpeech
             {
                 ID = a.Id,
                 Type = a.Type,
                 Name = a.Name,
                 Text = a.Text,
-                NextID = a.NextId ?? "None"
+                NextID = a.NextId ?? null
             }).ToList();
 
-            contentCreationDBContext.textDBs.AddRange(entities);
+            var entitiesChoice = choices.Select(a => new DBChoice
+            {
+                ID = a.Id,
+                ChoiceType = a.Type,
+                Name = a.Name,
+                Text = a.Text,
+                NextID = a.NextId ?? null
+            }).ToList();
+
+            contentCreationDBContext.textDB.AddRange(entitiesSpeech);
+            contentCreationDBContext.choiceDB.AddRange(entitiesChoice);
+
             contentCreationDBContext.SaveChanges();
 
             return "Ok";
@@ -43,18 +65,44 @@ namespace DeatIt_CreationContentService.Service.Database
             {
                 foreach (var item in jsonElement.EnumerateArray())
                 {
+                    var nextIdsProperty = item.GetProperty("nextIds");
+
+                    string nextIds;
+
+                    if (nextIdsProperty.ValueKind == JsonValueKind.Array)
+                    {
+                        nextIds = string.Join(", ", nextIdsProperty
+                            .EnumerateArray()
+                            .Select(x => x.GetString()?.Trim())
+                            .Where(s => !string.IsNullOrEmpty(s)));
+                    }
+                    else if (nextIdsProperty.ValueKind == JsonValueKind.String)
+                    {
+                        nextIds = nextIdsProperty.GetString()?.Trim();
+                    }
+                    else
+                    {
+                        nextIds = null;
+                    }
+
+                    if(nextIds == "")
+                    {
+                        nextIds = null;
+                    }
+
                     result.Add(new AnswerData
                     {
                         Id = item.GetProperty("id").GetString(),
                         Type = item.GetProperty("type").GetString(),
                         Name = item.GetProperty("name").GetString(),
                         Text = item.GetProperty("text").GetString(),
-                        NextId = item.GetProperty("nextId").GetString()
+                        NextId = nextIds
                     });
                 }
             }
 
             return result;
         }
+
     }
 }

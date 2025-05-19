@@ -5,7 +5,8 @@ namespace DeatIt_CreationContentService.Models.DB__Context
 {
     public class ContentCreationDBContext : DbContext, IContentCreationDBContext
     {
-        public DbSet<DBText> textDBs { get; set; }
+        public DbSet<DBSpeech> textDB { get; set; }
+        public DbSet<DBChoice> choiceDB { get; set; }
 
         public ContentCreationDBContext(DbContextOptions options) : base(options)
         {
@@ -31,7 +32,9 @@ namespace DeatIt_CreationContentService.Models.DB__Context
     }
     public interface IContentCreationDBContext
     {
-        public DbSet<DBText> textDBs { get; set; }
+        public DbSet<DBSpeech> textDB { get; set; }
+        public DbSet<DBChoice> choiceDB { get; set; }
+
         public void SaveChanges();
 
     }

@@ -3,6 +3,7 @@ using DeatIt_CreationContentService.Models.DB__Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeatIt_CreationContentService.Migrations
 {
     [DbContext(typeof(ContentCreationDBContext))]
-    partial class ContentCreationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250519221808_addNullableIds")]
+    partial class addNullableIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,32 +24,7 @@ namespace DeatIt_CreationContentService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DeatIt_CreationContentService.Models.DatabaseModel.DBChoice", b =>
-                {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ChoiceType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NextID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("choiceDB", (string)null);
-                });
-
-            modelBuilder.Entity("DeatIt_CreationContentService.Models.DatabaseModel.DBSpeech", b =>
+            modelBuilder.Entity("DeatIt_CreationContentService.Models.DatabaseModel.DBText", b =>
                 {
                     b.Property<string>("ID")
                         .HasColumnType("nvarchar(450)");
@@ -68,7 +46,7 @@ namespace DeatIt_CreationContentService.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("textDB", (string)null);
+                    b.ToTable("textDBs");
                 });
 #pragma warning restore 612, 618
         }
