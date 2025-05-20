@@ -17,7 +17,7 @@ const Choice = ({ style, number, onClickAnchor }) => {
             <input type="button" id={`choice-left-${number}-anchor`} onClick={onClickAnchor} className="choice-anchor-button-left" />
         </div>
         <div className="choice-select">
-            <select>
+            <select id={`choice-${number}-type-value`}>
                 <option value="Text">Text</option>
                 <option value="Choice">Choice</option>
             </select>

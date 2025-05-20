@@ -35,7 +35,6 @@ namespace DeatIt_CreationContentService.Service.Database
             var entitiesSpeech = speeches.Select(a => new DBSpeech
             {
                 ID = a.Id,
-                Type = a.Type,
                 Name = a.Name,
                 Text = a.Text,
                 NextID = a.NextId ?? null

@@ -5,6 +5,7 @@ import Speech from './InterfaceComponents/Speech';
 import Choice from './InterfaceComponents/Choice';
 import Xarrow from 'react-xarrows';
 import SendButton from './InterfaceComponents/SendButton';
+import './InterfaceComponents/Styles/MainScreen.css';
 
 const ContentCreation = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -120,8 +121,11 @@ const ContentCreation = () => {
         choices.forEach(({ number }) => {
             const id = `choice-${number}`;
             const inputs = document.querySelectorAll(`#name-${number}-choice`);
+            const choiceType = document.getElementById(`choice-${number}-type-value`).value;
             const name = inputs[0] ? inputs[0].value : "";
             const text = inputs[1] ? inputs[1].value : "";
+
+            console.log(choiceType);
 
             const nextArrow = arrows.find(arrow => arrow.start === `choice-right-${number}-anchor`
                 || arrow.start === `choice-left-${number}-anchor`);
@@ -131,7 +135,7 @@ const ContentCreation = () => {
 
             result.push({
                 id,
-                type: "choice",
+                type: choiceType,
                 name,
                 text,
                 nextIds
@@ -168,7 +172,7 @@ const ContentCreation = () => {
     }
 
     return (
-        <div
+        <div className="big-area"
             onContextMenu={GetMenu}
             onClick={hideMenu}
             style={{ width: '100vw', height: '100vh', backgroundColor: '#eee' }}
