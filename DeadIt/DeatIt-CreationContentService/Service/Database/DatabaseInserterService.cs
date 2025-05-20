@@ -2,6 +2,7 @@
 using DeatIt_CreationContentService.Models.DatabaseModel;
 using DeatIt_CreationContentService.Models.DB__Context;
 using DeatIt_CreationContentService.Service.Database.Interface;
+using System.Net.WebSockets;
 using System.Text.Json;
 
 namespace DeatIt_CreationContentService.Service.Database
@@ -34,19 +35,19 @@ namespace DeatIt_CreationContentService.Service.Database
 
             var entitiesSpeech = speeches.Select(a => new DBSpeech
             {
-                ID = a.Id,
+                ID = "s" + "-" + a.Id.Split("-")[1],
                 Name = a.Name,
                 Text = a.Text,
-                NextID = a.NextId ?? null
+                NextID = a.NextId?.Replace("choice", "c")?.Replace("speech", "s")
             }).ToList();
 
             var entitiesChoice = choices.Select(a => new DBChoice
             {
-                ID = a.Id,
+                ID = "c" + "-" + a.Id.Split("-")[1],
                 ChoiceType = a.Type,
                 Name = a.Name,
                 Text = a.Text,
-                NextID = a.NextId ?? null
+                NextID = a.NextId?.Replace("choice", "c")?.Replace("speech", "s")
             }).ToList();
 
             contentCreationDBContext.textDB.AddRange(entitiesSpeech);
