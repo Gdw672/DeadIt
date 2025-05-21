@@ -1,2 +1,1 @@
-WEB-приложение для создания интерактивных визуальных сценариев
-[скрины добавятся позже]
+WEB application for creating interactive visual scenarios [screenshots will be added later]
