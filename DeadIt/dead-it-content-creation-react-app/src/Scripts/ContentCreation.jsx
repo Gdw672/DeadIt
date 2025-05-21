@@ -5,6 +5,7 @@ import Speech from './InterfaceComponents/Speech';
 import Choice from './InterfaceComponents/Choice';
 import Xarrow from 'react-xarrows';
 import SendButton from './InterfaceComponents/SendButton';
+import './InterfaceComponents/Styles/MainScreen.css';
 
 const ContentCreation = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -98,36 +99,46 @@ const ContentCreation = () => {
             const name = nameInput ? nameInput.value : "";
             const text = textInput ? textInput.value : "";
 
-            const nextArrow = arrows.find(arrow => arrow.start === `speech-right-${number}-anchor` || arrow.start === `speech-left-${number}-anchort`);
-            let nextId = nextArrow ? nextArrow.end : null;
+            const nextArrows = arrows.filter(arrow => arrow.start === `speech-right-${number}-anchor` || arrow.start === `speech-left-${number}-anchort`
+                || arrow.start === `choice-left-${number}-anchort`
+                || arrow.start === `choice-right-${number}-anchort`);
 
-            nextId = getCorrecttNextId(nextId);
+            let nextIds = nextArrows.map(arrow => arrow.end);
+
+            nextIds = getCorrecttNextId(nextIds);
+
+            console.log(nextIds);
                 
             result.push({
                 id,
                 type: "speech",
                 name,
                 text,
-                nextId
+                nextIds
             });
         });
 
         choices.forEach(({ number }) => {
             const id = `choice-${number}`;
             const inputs = document.querySelectorAll(`#name-${number}-choice`);
+            const choiceType = document.getElementById(`choice-${number}-type-value`).value;
             const name = inputs[0] ? inputs[0].value : "";
             const text = inputs[1] ? inputs[1].value : "";
 
-            const nextArrow = arrows.find(arrow => arrow.start === `choice-right-${number}-anchor` || arrow.start === `choice-left-${number}-anchor`);
-            let nextId = nextArrow ? nextArrow.end : null;
-            nextId = getCorrecttNextId(nextId);
+            console.log(choiceType);
+
+            const nextArrow = arrows.find(arrow => arrow.start === `choice-right-${number}-anchor`
+                || arrow.start === `choice-left-${number}-anchor`);
+            let nextIdsIncorrect = nextArrow ? [nextArrow.end] : []; //Привод к массиву
+            nextIdsIncorrect = getCorrecttNextId(nextIdsIncorrect);
+            const nextIds = nextIdsIncorrect.length > 0 ? nextIdsIncorrect[0] : null;
 
             result.push({
                 id,
-                type: "choice",
+                type: choiceType,
                 name,
                 text,
-                nextId
+                nextIds
             });
         });
 
@@ -147,18 +158,21 @@ const ContentCreation = () => {
 
     }
 
-    const getCorrecttNextId = (name) => {
-        if (name == null) {
+    const getCorrecttNextId = (names) => {
+        if (names == null) {
             return null;
         }
+        var parts = [];
+        for (var i = 0; i < names.length; i++) {
+            var correctName = names[i].split('-');
+            parts.push(`${correctName[0]}-${correctName[2]}`)
+        }
 
-        let parts = name.split('-');
-
-        return `${parts[0]}-${parts[2]}`;
+        return parts;
     }
 
     return (
-        <div
+        <div className="big-area"
             onContextMenu={GetMenu}
             onClick={hideMenu}
             style={{ width: '100vw', height: '100vh', backgroundColor: '#eee' }}

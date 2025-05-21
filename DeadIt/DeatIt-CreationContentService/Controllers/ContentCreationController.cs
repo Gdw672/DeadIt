@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DeatIt_CreationContentService.Models;
+using DeatIt_CreationContentService.Service.Database.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeatIt_CreationContentService.Controllers
@@ -7,10 +9,17 @@ namespace DeatIt_CreationContentService.Controllers
     [ApiController]
     public class ContentCreationController : ControllerBase
     {
-        [HttpGet("GetAnswer")]
-        public string GetAnswer()
+        public IDatabaseInserterService databaseInserterService;
+        public ContentCreationController(IDatabaseInserterService databaseInserterService)
         {
-            return "answer is delivered.";
+            this.databaseInserterService = databaseInserterService; 
+        }
+
+        [HttpPost("PostData")]
+        public IActionResult PostData([FromBody] List<object> data)
+        {
+            databaseInserterService.InsertInfo(data);
+            return Ok (databaseInserterService.InsertInfo(data));
         }
     }
 }
