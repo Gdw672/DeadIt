@@ -3,6 +3,7 @@ using DeatIt_CreationContentService.Models.DatabaseModel;
 using DeatIt_CreationContentService.Models.DB__Context;
 using DeatIt_CreationContentService.Service.Database.Interface;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace DeatIt_CreationContentService.Service.Database
@@ -57,7 +58,8 @@ namespace DeatIt_CreationContentService.Service.Database
 
             return "Ok";
         }
-        private List<AnswerData> MapData(object data)
+
+        internal List<AnswerData> MapData(object data)
         {
             var result = new List<AnswerData>();
 
@@ -72,7 +74,7 @@ namespace DeatIt_CreationContentService.Service.Database
                     if (nextIdsProperty.ValueKind == JsonValueKind.Array)
                     {
                         nextIds = string.Join(", ", nextIdsProperty
-                            .EnumerateArray()
+                            .EnumerateArray()   
                             .Select(x => x.GetString()?.Trim())
                             .Where(s => !string.IsNullOrEmpty(s)));
                     }
