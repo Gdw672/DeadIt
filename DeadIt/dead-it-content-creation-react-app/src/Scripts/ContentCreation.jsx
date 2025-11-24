@@ -86,7 +86,7 @@ const ContentCreation = () => {
         const result = [];
 
         speeches.forEach(({ number }) => {
-            const id = `speech-${number}`;
+            const id = `speechTestr-${number}`;
             const name = document.getElementById(`name-${number}-speech`)?.value || "";
             const text = document.getElementById(`text-${number}-speech`)?.value || "";
 
@@ -99,7 +99,7 @@ const ContentCreation = () => {
         });
 
         choices.forEach(({ number }) => {
-            const id = `choice-${number}`;
+            const id = `choiceTest-${number}`;
             const inputs = document.querySelectorAll(`#name-${number}-choice`);
             const choiceType = document.getElementById(`choice-${number}-type-value`)?.value || "";
             const name = inputs[0]?.value || "";
