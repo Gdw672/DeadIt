@@ -3,7 +3,7 @@ import './Styles/Choice.css';
 const Choice = ({ style, number, onClickAnchor }) => {
 
     return <div style={style} id={`choice-${number}`} className="choice-background">
-        Choice#{number}
+        ChoiceTest#{number}
         <div className="choice-name-text">
             Name: <input type="text" id={`name-${number}-choice`} className="choice-input" />
             Text: <input type="text" id={`name-${number}-choice`} className="choice-input" />
