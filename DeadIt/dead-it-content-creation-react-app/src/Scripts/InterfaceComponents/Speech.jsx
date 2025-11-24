@@ -12,7 +12,7 @@ const Speech = ({ style, number, onClickAnchor }) => {
 
   
     return <div style={style} id={`speech-${number}`} className="speech-background">
-        SpeechTest#{number}
+        SpeechTestTest#{number}
         <div className="speech-name-text">
             Name: <input type="text" id={`name-${number}-speech`} className="speech-input" />
             Text: <input type="text" id={`text-${number}-speech`} className="speech-input" />
