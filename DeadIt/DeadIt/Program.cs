@@ -7,6 +7,7 @@ using DeadIt.Service.Images.Interface;
 using DeadIt.Service.Session;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 var Origins = "dead-it-react-app";
@@ -31,6 +32,7 @@ builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddDbContext<DeadItDBContext>(options =>
     options.UseSqlServer("Server=mssql,1433; Database=DeadIt; User Id=sa; Password=Lord3009!; TrustServerCertificate=True;"));
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -45,9 +47,15 @@ SetupStaticFiles();
 
 app.UseSession();
 app.UseRouting();
-app.UseCors(Origins);
 
+// Prometheus metrics - must be after UseRouting() to capture route information
+app.UseHttpMetrics();
+
+app.UseCors(Origins);
 app.UseAuthorization();
+
+// Prometheus metrics endpoint
+app.UseMetricServer();
 
 app.MapControllerRoute(
     name: "default",

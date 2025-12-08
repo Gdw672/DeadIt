@@ -27,6 +27,7 @@ services:
       - "3000:3000"
     volumes:
      - ./dead-it-content-creation-react-app:/app
+     - /app/node_modules
     environment:
       NODE_ENV: development
     stdin_open: true
@@ -41,6 +42,7 @@ services:
       - "3001:3000"
     volumes:
      - ./dead-it-react-app:/app
+     - /app/node_modules
     environment:
       NODE_ENV: development
     stdin_open: true
@@ -59,5 +61,40 @@ services:
     - mssql_data:/var/opt/mssql
     - C:/mssql_data:/var/opt/mssql/data
     - /c/DeadIt - db:/backup
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    restart: unless-stopped
+    depends_on:
+      - DeadIt
+      - DeadIt-ContentCreation
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3002:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    restart: unless-stopped
+    depends_on:
+      - prometheus
 volumes:
   mssql_data:
+  prometheus_data:
+  grafana_data:

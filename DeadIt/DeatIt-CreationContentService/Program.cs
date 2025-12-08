@@ -3,6 +3,7 @@ using DeatIt_CreationContentService.Service.Database;
 using DeatIt_CreationContentService.Service.Database.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 var Origins = "dead-it-content-creation-react-app";
@@ -33,9 +34,17 @@ builder.Services.AddDbContext<ContentCreationDBContext>(options =>
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UseRouting();
+
+// Prometheus metrics - must be after UseRouting() to capture route information
+app.UseHttpMetrics();
+
 app.UseCors(Origins);
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Prometheus metrics endpoint
+app.UseMetricServer();
 
 app.Run();
