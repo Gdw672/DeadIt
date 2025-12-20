@@ -24,7 +24,7 @@ const ContentCreation = () => {
 
     // Панорамирование canvas мышью
     const handleMouseDown = (e) => {
-        if (e.button !== 0) return; // Только левая кнопка
+        if (e.button !== 0) return;
         isDraggingRef.current = true;
         dragStartRef.current = { x: e.clientX, y: e.clientY };
         scrollStartRef.current = { left: viewportRef.current.scrollLeft, top: viewportRef.current.scrollTop };
@@ -85,19 +85,22 @@ const ContentCreation = () => {
     const sendData = () => {
         const result = [];
 
+        // Обработка speeches
         speeches.forEach(({ number }) => {
             const id = `speechTestr-${number}`;
             const name = document.getElementById(`name-${number}-speech`)?.value || "";
             const text = document.getElementById(`text-${number}-speech`)?.value || "";
 
             let nextIds = arrows
-                .filter(a => a.start.includes(`${number}-`))
+                .filter(a => a.start === `speech-right-${number}-anchor` || a.start === `speech-left-${number}-anchor`)
                 .map(a => a.end);
-            nextIds = nextIds.map(n => n.split('-')[0] + '-' + n.split('-')[2]);
+
+            nextIds = nextIds.length ? nextIds.map(n => n.split('-')[0] + '-' + n.split('-')[2]) : null;
 
             result.push({ id, type: "speech", name, text, nextIds });
         });
 
+        // Обработка choices
         choices.forEach(({ number }) => {
             const id = `choiceTest-${number}`;
             const inputs = document.querySelectorAll(`#name-${number}-choice`);
@@ -105,11 +108,16 @@ const ContentCreation = () => {
             const name = inputs[0]?.value || "";
             const text = inputs[1]?.value || "";
 
-            let nextIds = arrows.find(a => a.start.includes(`${number}-`))?.end || null;
-            if (nextIds) nextIds = nextIds.split('-')[0] + '-' + nextIds.split('-')[2];
+            let nextIds = arrows
+                .filter(a => a.start === `choice-right-${number}-anchor` || a.start === `choice-left-${number}-anchor`)
+                .map(a => a.end);
+
+            nextIds = nextIds.length ? nextIds.map(n => n.split('-')[0] + '-' + n.split('-')[2]) : null;
 
             result.push({ id, type: choiceType, name, text, nextIds });
         });
+
+        console.log("Structure to send:", JSON.stringify(result, null, 2));
 
         axios.post('http://localhost:5181/api/ContentCreation/PostData', result, {
             headers: { 'Content-Type': 'application/json' }

@@ -12,7 +12,7 @@ const NextText = () => {
     const [choiceInfo, setChoice] = useState(null);
 
     const UpdateText = () => {
-        axios.get('http://localhost:7525/Main/NextTextWithoutChoice')
+        axios.get('http://localhost:5075/Main/NextTextWithoutChoice')
             .then(response => {
                 GetBackground();
                 const data = response.data;
@@ -31,7 +31,7 @@ const NextText = () => {
     }
 
     const GetBackground = () => {
-        axios.get('http://localhost:7525/Main/GetBackground')
+        axios.get('http://localhost:5075/Main/GetBackground')
             .then(response => {
                 const data = response.data;
                 setBackground(data);
@@ -41,7 +41,7 @@ const NextText = () => {
     }
 
     const CallNextTextFromChoice = (nextChoiceID) => {
-        axios.post('http://localhost:7525/Main/NextTextFromChoice', { id: nextChoiceID }, {
+        axios.post('http://localhost:5075/Main/NextTextFromChoice', { id: nextChoiceID }, {
             headers: {
                 'Content-Type': 'application/json'
             }

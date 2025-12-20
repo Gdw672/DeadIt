@@ -30,8 +30,10 @@ builder.Services.AddCors(options =>
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddDbContext<DeadItDBContext>(options =>
-    options.UseSqlServer("Server=mssql,1433; Database=DeadIt; User Id=sa; Password=Lord3009!; TrustServerCertificate=True;"));
-var app = builder.Build();
+options.UseSqlServer(
+  "Server=localhost,1434;Database=DeadIt;User Id=sa;Password=Lord3009!;TrustServerCertificate=True;"
+));
+ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
