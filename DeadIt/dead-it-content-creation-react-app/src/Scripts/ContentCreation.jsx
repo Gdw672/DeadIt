@@ -1,5 +1,5 @@
 ﻿import axios from 'axios';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import DynamicMenu from './InterfaceComponents/DynamicMenu';
 import Speech from './InterfaceComponents/Speech';
 import Choice from './InterfaceComponents/Choice';
@@ -16,6 +16,8 @@ const ContentCreation = () => {
     const [numberChoice, setNumberChoice] = useState(0);
     const [buttonAttachArrowStart, setButtonAttachArrowStart] = useState(null);
     const [arrows, setArrows] = useState([]);
+    const [lastSavedData, setLastSavedData] = useState(null); // Храним последние сохраненные данные для сравнения
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false); // Флаг изменений
 
     const viewportRef = useRef();
     const isDraggingRef = useRef(false);
@@ -63,6 +65,7 @@ const ContentCreation = () => {
         const newNumber = numberSpeech + 1;
         setNumberSpeech(newNumber);
         setSpeeches(prev => [...prev, { coords: spawnCoordinates, number: newNumber }]);
+        setHasUnsavedChanges(true);
     };
 
     const spawnChoice = () => {
@@ -70,19 +73,27 @@ const ContentCreation = () => {
         const newNumber = numberChoice + 1;
         setNumberChoice(newNumber);
         setChoices(prev => [...prev, { coords: spawnCoordinates, number: newNumber }]);
+        setHasUnsavedChanges(true);
     };
 
     // Стрелки
     const startArrowing = (e) => setButtonAttachArrowStart(e.target.id);
     const endArrowing = (e) => {
         if (buttonAttachArrowStart && e.target.id) {
-            setArrows(prev => [...prev, { start: buttonAttachArrowStart, end: e.target.id }]);
+            setArrows(prev => {
+                const newArrows = [...prev, { start: buttonAttachArrowStart, end: e.target.id }];
+                // Проверяем, действительно ли добавилась новая стрелка
+                if (prev.length !== newArrows.length) {
+                    setHasUnsavedChanges(true);
+                }
+                return newArrows;
+            });
         }
         setButtonAttachArrowStart(null);
     };
 
-    // Отправка данных
-    const sendData = () => {
+    // Функция сбора данных (та же логика, что и в sendData)
+    const gatherData = useCallback(() => {
         const result = [];
 
         // Обработка speeches
@@ -117,13 +128,97 @@ const ContentCreation = () => {
             result.push({ id, type: choiceType, name, text, nextIds });
         });
 
-        console.log("Structure to send:", JSON.stringify(result, null, 2));
+        return result;
+    }, [speeches, choices, arrows]);
 
-        axios.post('http://localhost:5181/api/ContentCreation/PostData', result, {
-            headers: { 'Content-Type': 'application/json' }
-        }).then(res => console.log(res.data))
-            .catch(err => console.error(err));
+    // Функция отправки данных
+    const sendData = useCallback(async (isAutoSave = false) => {
+        const currentData = gatherData();
+
+        // Для автосохранения проверяем, есть ли изменения
+        if (isAutoSave) {
+            // Если нет элементов вообще - не отправляем
+            if (currentData.length === 0) {
+                console.log('Автосохранение: нет элементов для сохранения');
+                return;
+            }
+
+            // Если нет изменений с последнего сохранения - не отправляем
+            if (lastSavedData && JSON.stringify(currentData) === JSON.stringify(lastSavedData)) {
+                console.log('Автосохранение: нет изменений');
+                return;
+            }
+        }
+
+        console.log(`${isAutoSave ? 'Автосохранение:' : 'Ручное сохранение:'}`, JSON.stringify(currentData, null, 2));
+
+        try {
+            const response = await axios.post('http://localhost:5181/api/ContentCreation/PostData', currentData, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            console.log(`${isAutoSave ? 'Автосохранение успешно:' : 'Данные отправлены:'}`, response.data);
+
+            // Сохраняем текущие данные как последние сохраненные
+            setLastSavedData(currentData);
+            setHasUnsavedChanges(false);
+
+            return response.data;
+        } catch (err) {
+            console.error(`${isAutoSave ? 'Ошибка автосохранения:' : 'Ошибка отправки:'}`, err);
+            throw err;
+        }
+    }, [gatherData, lastSavedData]);
+
+    // Обработчик ручной отправки (старая логика)
+    const handleManualSend = () => {
+        sendData(false).catch(err => {
+            // Ошибка уже обработана в sendData
+        });
     };
+
+    // Механизм автосохранения каждые 5 минут
+    useEffect(() => {
+        const autoSaveInterval = setInterval(() => {
+            if (speeches.length > 0 || choices.length > 0) {
+                sendData(); // отправляем полный список
+            } else {
+                console.log('Автосохранение: нет элементов для отправки');
+            }
+        }, 30000);
+
+        return () => clearInterval(autoSaveInterval);
+    }, [speeches, choices, sendData]);
+
+    // Отслеживание изменений в полях ввода (для флага изменений)
+    useEffect(() => {
+        const handleInputChange = () => {
+            setHasUnsavedChanges(true);
+        };
+
+        // Находим все поля ввода в компонентах Speech и Choice
+        const speechInputs = document.querySelectorAll('[id*="-speech"]');
+        const choiceInputs = document.querySelectorAll('[id*="-choice"]');
+
+        const allInputs = [...speechInputs, ...choiceInputs];
+
+        allInputs.forEach(input => {
+            input.addEventListener('input', handleInputChange);
+            input.addEventListener('change', handleInputChange);
+        });
+
+        return () => {
+            allInputs.forEach(input => {
+                input.removeEventListener('input', handleInputChange);
+                input.removeEventListener('change', handleInputChange);
+            });
+        };
+    }, [speeches.length, choices.length]); // Переустанавливаем обработчики при изменении количества элементов
+
+    // Также отслеживаем изменения в самих массивах элементов
+    useEffect(() => {
+        setHasUnsavedChanges(true);
+    }, [speeches, choices, arrows]);
 
     return (
         <div
@@ -160,7 +255,11 @@ const ContentCreation = () => {
 
                 {arrows.map((a, i) => <Xarrow key={i} start={a.start} end={a.end} />)}
 
-                <SendButton id="sendButton" onClick={sendData} />
+                <SendButton
+                    id="sendButton"
+                    onClick={handleManualSend}
+                    hasUnsavedChanges={hasUnsavedChanges}
+                />
             </div>
         </div>
     );

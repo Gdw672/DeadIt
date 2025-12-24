@@ -1,5 +1,41 @@
-﻿.send-buuton {
-    position: absolute;
-    right: 10%;
-    bottom: 10%;
+﻿.send-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000;
+}
+
+    .send-button.unsaved {
+        background-color: #ff9800;
+        animation: pulse 2s infinite;
+    }
+
+    .send-button.saved {
+        background-color: #4CAF50;
+    }
+
+    .send-button:hover {
+        opacity: 0.9;
+        transform: scale(1.05);
+    }
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 152, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0);
+    }
 }
