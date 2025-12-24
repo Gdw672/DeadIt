@@ -7,3 +7,4 @@ public interface IGrafanaService
     Task<bool> CreateAlertRulesAsync(CancellationToken cancellationToken = default);
 }
 
+

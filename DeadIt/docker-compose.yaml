@@ -59,8 +59,44 @@ services:
     restart: always
     volumes:
     - mssql_data:/var/opt/mssql
-    - C:/mssql_data:/var/opt/mssql/data
-    - /c/DeadIt - db:/backup
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "Lord3009!" -Q "SELECT 1" -C || /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Lord3009!" -Q "SELECT 1" -C || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+  mssql-init:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: mssql_init
+    environment:
+      SA_PASSWORD: "Lord3009!"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - ./mssql-init:/scripts
+    restart: "no"
+    entrypoint: ["/bin/bash", "-c"]
+    command: >
+      "
+      echo 'Waiting for SQL Server to be ready...';
+      SQLCMD='/opt/mssql-tools/bin/sqlcmd';
+      if [ ! -f $$SQLCMD ]; then
+        SQLCMD='/opt/mssql-tools18/bin/sqlcmd';
+      fi;
+      for i in {1..60}; do
+        if $$SQLCMD -S mssql -U sa -P 'Lord3009!' -Q 'SELECT 1' -C 2>/dev/null; then
+          echo 'SQL Server is ready!';
+          break;
+        fi;
+        echo 'SQL Server is not ready yet... (attempt '$$i'/60)';
+        sleep 2;
+      done;
+      echo 'Creating databases...';
+      $$SQLCMD -S mssql -U sa -P 'Lord3009!' -i /scripts/init-db.sql -C;
+      echo 'Database initialization completed!';
+      "
+    depends_on:
+      mssql:
+        condition: service_started
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus

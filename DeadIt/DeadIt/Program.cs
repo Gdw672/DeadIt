@@ -176,6 +176,9 @@ void SetupTransient()
     builder.Services.AddTransient<IDatabaseChoiceService, DatabaseChoiceService>();
     builder.Services.AddTransient<IDatabaseNoChoiceService, DatabaseNoChoiceService>();
     builder.Services.AddScoped<IBackgroundService, DeadIt.Service.Images.BackgroundService>();
+    
+    // Регистрация BackgroundService для проверки состояния БД
+    builder.Services.AddHostedService<DatabaseHealthService>();
 }
 
 //ToDo: разобраться с путем к проекту, чтобы не указывать путь целиком.

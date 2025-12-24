@@ -161,7 +161,7 @@ public class GrafanaService : IGrafanaService
     {
       ""datasource"": {
         ""type"": ""prometheus"",
-        ""uid"": ""PBFA97CFB590B2093""
+        ""uid"": ""prometheus""
       },
       ""fieldConfig"": {
         ""defaults"": {
@@ -243,15 +243,8 @@ public class GrafanaService : IGrafanaService
       ""pluginVersion"": ""12.3.0"",
       ""targets"": [
         {
-          ""datasource"": {
-            ""type"": ""prometheus"",
-            ""uid"": ""PBFA97CFB590B2093""
-          },
-          ""editorMode"": ""code"",
           ""expr"": ""dotnet_total_memory_bytes"",
-          ""interval"": """",
           ""legendFormat"": ""{{job}}"",
-          ""range"": true,
           ""refId"": ""A""
         }
       ],
@@ -261,7 +254,7 @@ public class GrafanaService : IGrafanaService
     {
       ""datasource"": {
         ""type"": ""prometheus"",
-        ""uid"": ""PBFA97CFB590B2093""
+        ""uid"": ""prometheus""
       },
       ""fieldConfig"": {
         ""defaults"": {
@@ -342,10 +335,8 @@ public class GrafanaService : IGrafanaService
       ""pluginVersion"": ""12.3.0"",
       ""targets"": [
         {
-          ""editorMode"": ""builder"",
           ""expr"": ""process_num_threads"",
           ""legendFormat"": ""{{job}}"",
-          ""range"": true,
           ""refId"": ""A""
         }
       ],
@@ -355,7 +346,7 @@ public class GrafanaService : IGrafanaService
     {
       ""datasource"": {
         ""type"": ""prometheus"",
-        ""uid"": ""PBFA97CFB590B2093""
+        ""uid"": ""prometheus""
       },
       ""fieldConfig"": {
         ""defaults"": {
@@ -437,10 +428,8 @@ public class GrafanaService : IGrafanaService
       ""pluginVersion"": ""12.3.0"",
       ""targets"": [
         {
-          ""editorMode"": ""code"",
           ""expr"": ""sum(rate(dotnet_collection_count_total[5m])) by (generation) * 60"",
           ""legendFormat"": ""Generation {{generation}}"",
-          ""range"": true,
           ""refId"": ""A""
         }
       ],
@@ -450,7 +439,7 @@ public class GrafanaService : IGrafanaService
     {
       ""datasource"": {
         ""type"": ""prometheus"",
-        ""uid"": ""PBFA97CFB590B2093""
+        ""uid"": ""prometheus""
       },
       ""fieldConfig"": {
         ""defaults"": {
@@ -501,10 +490,8 @@ public class GrafanaService : IGrafanaService
       ""pluginVersion"": ""12.3.0"",
       ""targets"": [
         {
-          ""editorMode"": ""code"",
           ""expr"": ""sum(dotnet_collection_count_total) by (generation)"",
           ""legendFormat"": ""Generation {{generation}}"",
-          ""range"": true,
           ""refId"": ""A""
         }
       ],
@@ -514,7 +501,7 @@ public class GrafanaService : IGrafanaService
     {
       ""datasource"": {
         ""type"": ""prometheus"",
-        ""uid"": ""PBFA97CFB590B2093""
+        ""uid"": ""prometheus""
       },
       ""fieldConfig"": {
         ""defaults"": {
@@ -598,10 +585,8 @@ public class GrafanaService : IGrafanaService
       ""pluginVersion"": ""12.3.0"",
       ""targets"": [
         {
-          ""editorMode"": ""code"",
           ""expr"": ""rate(http_request_duration_seconds_count[5m]) * 600"",
           ""legendFormat"": ""{{method}} {{route}} {{code}}"",
-          ""range"": true,
           ""refId"": ""A""
         }
       ],
@@ -634,18 +619,26 @@ public class GrafanaService : IGrafanaService
         {
             // Проверяем, существует ли contact point
             var existingContactPoints = await GetContactPointsAsync(cancellationToken);
-            var tgContactPoint = existingContactPoints?.FirstOrDefault(cp => 
-                cp.TryGetProperty("name", out var name) && name.GetString() == "TG");
+            JsonElement? tgContactPoint = null;
+            if (existingContactPoints != null)
+            {
+                var found = existingContactPoints.FirstOrDefault(cp => 
+                    cp.TryGetProperty("name", out var name) && name.GetString() == "TG");
+                if (found.ValueKind != JsonValueKind.Undefined)
+                {
+                    tgContactPoint = found;
+                }
+            }
 
             var contactPointJson = GetContactPointJson();
             var contactPoint = JsonSerializer.Deserialize<JsonElement>(contactPointJson);
 
-            if (tgContactPoint != null && tgContactPoint.ValueKind != JsonValueKind.Null)
+            if (tgContactPoint.HasValue)
             {
                 _logger.LogInformation("Contact point 'TG' already exists. Updating...");
                 
                 // Обновляем существующий contact point
-                if (tgContactPoint.TryGetProperty("id", out var id))
+                if (tgContactPoint.Value.TryGetProperty("id", out var id))
                 {
                     var updateContent = new StringContent(contactPointJson, Encoding.UTF8, "application/json");
                     var updateResponse = await _httpClient.PutAsync(
@@ -666,30 +659,32 @@ public class GrafanaService : IGrafanaService
                         return false;
                     }
                 }
+                else
+                {
+                    _logger.LogWarning("Contact point 'TG' exists but has no ID. Creating new one...");
+                }
+            }
+
+            // Создаем новый contact point (если не существует или не удалось обновить)
+            _logger.LogInformation("Creating new contact point 'TG'...");
+            
+            var createContent = new StringContent(contactPointJson, Encoding.UTF8, "application/json");
+            var createResponse = await _httpClient.PostAsync(
+                $"{_grafanaUrl}/api/alert-notifications", 
+                createContent, 
+                cancellationToken);
+
+            if (createResponse.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("Contact point created successfully");
+                return true;
             }
             else
             {
-                _logger.LogInformation("Creating new contact point 'TG'...");
-                
-                // Создаем новый contact point
-                var createContent = new StringContent(contactPointJson, Encoding.UTF8, "application/json");
-                var createResponse = await _httpClient.PostAsync(
-                    $"{_grafanaUrl}/api/alert-notifications", 
-                    createContent, 
-                    cancellationToken);
-
-                if (createResponse.IsSuccessStatusCode)
-                {
-                    _logger.LogInformation("Contact point created successfully");
-                    return true;
-                }
-                else
-                {
-                    var errorContent = await createResponse.Content.ReadAsStringAsync(cancellationToken);
-                    _logger.LogError("Failed to create contact point. Status: {Status}, Response: {Response}", 
-                        createResponse.StatusCode, errorContent);
-                    return false;
-                }
+                var errorContent = await createResponse.Content.ReadAsStringAsync(cancellationToken);
+                _logger.LogError("Failed to create contact point. Status: {Status}, Response: {Response}", 
+                    createResponse.StatusCode, errorContent);
+                return false;
             }
         }
         catch (Exception ex)
@@ -714,15 +709,20 @@ public class GrafanaService : IGrafanaService
 
             // Получаем существующие alert rule groups
             var existingGroups = await GetAlertRuleGroupsAsync(folderUid ?? folderName, cancellationToken);
-            var existingGroup = existingGroups?.FirstOrDefault(g => 
-                g.TryGetProperty("name", out var name) && name.GetString() == "DeadIt Alerts");
-            
-            // Если группы нет в массиве, проверяем через прямой запрос
-            bool groupExists = existingGroup != null && existingGroup.ValueKind != JsonValueKind.Null;
+            JsonElement? existingGroup = null;
+            if (existingGroups != null)
+            {
+                var found = existingGroups.FirstOrDefault(g => 
+                    g.TryGetProperty("name", out var name) && name.GetString() == "DeadIt Alerts");
+                if (found.ValueKind != JsonValueKind.Undefined)
+                {
+                    existingGroup = found;
+                }
+            }
 
             var alertRulesJson = GetAlertRulesJson(folderUid ?? folderName);
 
-            if (groupExists && existingGroup != null)
+            if (existingGroup.HasValue)
             {
                 _logger.LogInformation("Alert rule group 'DeadIt Alerts' already exists. Updating...");
                 
@@ -898,7 +898,7 @@ public class GrafanaService : IGrafanaService
                 ""from"": 300,
                 ""to"": 0
               }},
-              ""datasourceUid"": ""PBFA97CFB590B2093"",
+              ""datasourceUid"": ""prometheus"",
               ""model"": {{
                 ""expr"": ""rate(process_cpu_seconds_total[5m]) * 100 > 80"",
                 ""intervalMs"": 1000,
@@ -932,7 +932,7 @@ public class GrafanaService : IGrafanaService
                 ""from"": 300,
                 ""to"": 0
               }},
-              ""datasourceUid"": ""PBFA97CFB590B2093"",
+              ""datasourceUid"": ""prometheus"",
               ""model"": {{
                 ""expr"": ""(dotnet_total_memory_bytes / 1024 / 1024 / 1024) > 2"",
                 ""intervalMs"": 1000,
@@ -966,7 +966,7 @@ public class GrafanaService : IGrafanaService
                 ""from"": 300,
                 ""to"": 0
               }},
-              ""datasourceUid"": ""PBFA97CFB590B2093"",
+              ""datasourceUid"": ""prometheus"",
               ""model"": {{
                 ""expr"": ""up{{job=~""deadit-.*""}} == 0"",
                 ""intervalMs"": 1000,
@@ -1000,7 +1000,7 @@ public class GrafanaService : IGrafanaService
                 ""from"": 300,
                 ""to"": 0
               }},
-              ""datasourceUid"": ""PBFA97CFB590B2093"",
+              ""datasourceUid"": ""prometheus"",
               ""model"": {{
                 ""expr"": ""rate(http_request_duration_seconds_count{{code=~""5..""}}[5m]) > 0.1"",
                 ""intervalMs"": 1000,
@@ -1034,7 +1034,7 @@ public class GrafanaService : IGrafanaService
                 ""from"": 600,
                 ""to"": 0
               }},
-              ""datasourceUid"": ""PBFA97CFB590B2093"",
+              ""datasourceUid"": ""prometheus"",
               ""model"": {{
                 ""expr"": ""absent_over_time(up{{job=~""deadit-.*""}}[10m])"",
                 ""intervalMs"": 1000,
@@ -1068,7 +1068,7 @@ public class GrafanaService : IGrafanaService
                 ""from"": 600,
                 ""to"": 0
               }},
-              ""datasourceUid"": ""PBFA97CFB590B2093"",
+              ""datasourceUid"": ""prometheus"",
               ""model"": {{
                 ""expr"": ""absent_over_time(http_request_duration_seconds_count[10m]) and up{{job=~""deadit-.*""}} == 1"",
                 ""intervalMs"": 1000,
@@ -1095,4 +1095,5 @@ public class GrafanaService : IGrafanaService
     }}";
     }
 }
+
 

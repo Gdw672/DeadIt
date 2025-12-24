@@ -1,0 +1,158 @@
+apiVersion: 1
+
+groups:
+  - name: DeadIt Alerts
+    interval: 30s
+    orgId: 1
+    folder: DeadIt
+    rules:
+      - uid: high_cpu_usage
+        title: High CPU Usage
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: 'rate(process_cpu_seconds_total[5m]) * 100 > 80'
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: NoData
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          description: 'CPU usage is above 80% for service {{ $labels.job }}. Current value: {{ $value }}%'
+          summary: 'High CPU usage detected'
+        labels:
+          severity: warning
+        notifications:
+          - default
+
+      - uid: high_memory_usage
+        title: High Memory Usage
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: '(process_working_set_bytes / 1024 / 1024 / 1024) > 2'
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: NoData
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          description: 'Memory usage is above 2GB for service {{ $labels.job }}. Current value: {{ $value }}GB'
+          summary: 'High memory usage detected'
+        labels:
+          severity: warning
+        notifications:
+          - TG
+
+      - uid: database_unavailable
+        title: Database/Service Unavailable
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: 'up{job=~"deadit-.*"} == 0'
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: Alerting
+        execErrState: Alerting
+        for: 2m
+        annotations:
+          description: 'Service {{ $labels.job }} is down or database is unavailable'
+          summary: 'Database/Service unavailable'
+        labels:
+          severity: critical
+        notifications:
+          - default
+
+      - uid: high_error_rate
+        title: High Error Rate
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: 'rate(http_requests_received_total{code=~"5.."}[5m]) > 0.1'
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: NoData
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          description: 'Error rate is high for service {{ $labels.job }}: {{ $value }} errors/sec'
+          summary: 'High error rate detected'
+        labels:
+          severity: warning
+        notifications:
+          - TG
+
+      - uid: no_metrics_available
+        title: No Metrics Available
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: 'absent_over_time(up{job=~"deadit-.*"}[10m])'
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: Alerting
+        execErrState: Alerting
+        for: 5m
+        annotations:
+          description: 'No metrics available for service {{ $labels.job }}. Service might be down, metrics endpoint is unreachable, or disk space issues.'
+          summary: 'No metrics available - possible disk space issue'
+        labels:
+          severity: critical
+        notifications:
+          - default
+
+      - uid: disk_space_warning
+        title: Potential Disk Space Issue
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: 'absent_over_time(http_requests_received_total[10m]) and up{job=~"deadit-.*"} == 1'
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+        noDataState: NoData
+        execErrState: Alerting
+        for: 10m
+        annotations:
+          description: 'Service {{ $labels.job }} is up but not receiving requests. Possible disk space issue preventing logging or data writes.'
+          summary: 'Potential disk space issue detected'
+        labels:
+          severity: warning
+        notifications:
+          - TG
+
