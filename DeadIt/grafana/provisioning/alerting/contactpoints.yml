@@ -1,18 +1,12 @@
 apiVersion: 1
 
 contactPoints:
-  - name: default
+  - name: Telegram
     receivers:
-      - uid: default-email
-        type: email
+      - uid: telegram-receiver
+        type: telegram
         settings:
-          addresses: admin@example.com
-          singleEmail: false
-          disableResolveMessage: false
-      - uid: default-webhook
-        type: webhook
-        settings:
-          url: http://localhost:8080/webhook
-          httpMethod: POST
+          bottoken: "8466585924:AAF1vwzEuxcGO-1OjvuISUo5avO9UrvLM6A"
+          chatid: "-5008075700"
           disableResolveMessage: false
 

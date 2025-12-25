@@ -135,29 +135,6 @@ _ = Task.Run(async () =>
             logger.LogWarning("Failed to create/update Grafana dashboard. This is not critical and the application will continue to run.");
         }
         
-        // Создаем contact point
-        logger.LogInformation("Attempting to create Grafana contact point...");
-        var contactPointSuccess = await grafanaService.CreateContactPointAsync();
-        if (contactPointSuccess)
-        {
-            logger.LogInformation("Grafana contact point created/updated successfully");
-        }
-        else
-        {
-            logger.LogWarning("Failed to create/update Grafana contact point. This is not critical and the application will continue to run.");
-        }
-        
-        // Создаем alert rules
-        logger.LogInformation("Attempting to create Grafana alert rules...");
-        var alertRulesSuccess = await grafanaService.CreateAlertRulesAsync();
-        if (alertRulesSuccess)
-        {
-            logger.LogInformation("Grafana alert rules created/updated successfully");
-        }
-        else
-        {
-            logger.LogWarning("Failed to create/update Grafana alert rules. This is not critical and the application will continue to run.");
-        }
     }
     catch (Exception ex)
     {
