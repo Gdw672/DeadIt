@@ -114,6 +114,12 @@ services:
     depends_on:
       - DeadIt
       - DeadIt-ContentCreation
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    restart: unless-stopped
   grafana:
     image: grafana/grafana:latest
     container_name: grafana

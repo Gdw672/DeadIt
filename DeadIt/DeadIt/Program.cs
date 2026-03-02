@@ -11,6 +11,8 @@ using DeadIt.Service.Images.Interface;
 using DeadIt.Service.Session;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +38,22 @@ builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddDbContext<DeadItDBContext>(options =>
     options.UseSqlServer("Server=mssql,1433; Database=DeadIt; User Id=sa; Password=Lord3009!; TrustServerCertificate=True;"));
+
+// OpenTelemetry tracing with Zipkin exporter
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracerProviderBuilder =>
+    {
+        tracerProviderBuilder
+            .SetResourceBuilder(
+                ResourceBuilder.CreateDefault()
+                    .AddService("DeadIt"))
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddZipkinExporter(options =>
+            {
+                options.Endpoint = new Uri("http://zipkin:9411/api/v2/spans");
+            });
+    });
 
 // Регистрация Grafana сервиса
 builder.Services.AddHttpClient<IGrafanaService, GrafanaService>();

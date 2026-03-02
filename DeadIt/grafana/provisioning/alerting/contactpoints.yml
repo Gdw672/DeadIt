@@ -8,5 +8,7 @@ contactPoints:
         settings:
           bottoken: "8466585924:AAF1vwzEuxcGO-1OjvuISUo5avO9UrvLM6A"
           chatid: "-5008075700"
+          message: "{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}"
+          parse_mode: "HTML"
           disableResolveMessage: false
 
