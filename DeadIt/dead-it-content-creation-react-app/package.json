@@ -10,6 +10,7 @@
     "axios": "^1.8.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-draggable": "^4.5.0",
     "react-scripts": "5.0.1",
     "react-xarrows": "^2.0.2",
     "web-vitals": "^2.1.4"

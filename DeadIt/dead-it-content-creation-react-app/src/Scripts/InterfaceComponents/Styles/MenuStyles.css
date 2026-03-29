@@ -1,17 +1,94 @@
-.white-square {
-    position: absolute;
-    width: 150px;
-    height: 100px;
-    background-color: white;
-    border: 1px solid black;
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+.context-menu {
+  position: absolute;
+  background: rgba(20, 20, 30, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #2e2e45;
+  border-radius: 10px;
+  padding: 6px;
+  min-width: 160px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 16px 48px rgba(0, 0, 0, 0.8),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: menuAppear 0.12s ease-out;
+}
+
+@keyframes menuAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.context-menu-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #333355;
+  padding: 4px 10px 8px;
+}
+
+.context-menu-divider {
+  height: 1px;
+  background: #1e1e2e;
+  margin: 4px 0;
 }
 
 .button-menu {
-    width: 70px;
-    height: 30px;
-    background-color: white;
-    border: 1px solid black;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #8888aa;
+  text-align: left;
+  transition: all 0.12s;
 }
 
+.button-menu:hover {
+  background: rgba(255,255,255,0.05);
+  color: #c8c8e8;
+}
 
+.button-menu-speech:hover {
+  background: rgba(79, 142, 247, 0.1);
+  color: #4f8ef7;
+}
 
+.button-menu-choice:hover {
+  background: rgba(247, 162, 62, 0.1);
+  color: #f7a23e;
+}
+
+.button-menu-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.button-menu-speech .button-menu-dot {
+  background: #4f8ef7;
+  box-shadow: 0 0 6px rgba(79, 142, 247, 0.5);
+}
+
+.button-menu-choice .button-menu-dot {
+  background: #f7a23e;
+  box-shadow: 0 0 6px rgba(247, 162, 62, 0.5);
+}
