@@ -344,29 +344,49 @@ const ContentCreation = () => {
     return () => window.removeEventListener('keydown', onKey);
   }, [selectedNodes, deleteSelected]);
 
-  // ── gather + send ─────────────────────────────────────────────
-  const gatherData = useCallback(() => {
-    const result = [];
-    speeches.forEach(({ number }) => {
-      const name = document.getElementById(`name-${number}-speech`)?.value || '';
-      const text = document.getElementById(`text-${number}-speech`)?.value || '';
-      let nextIds = arrows.filter(a =>
-        a.start === `speech-right-${number}-anchor` || a.start === `speech-left-${number}-anchor`
-      ).map(a => { const p = a.end.split('-'); return `${p[0]}-${p[2]}`; });
-      result.push({ id: `speechTestr-${number}`, type: 'speech', name, text, nextIds: nextIds.length ? nextIds : null });
-    });
-    choices.forEach(({ number }) => {
-      const inputs = document.querySelectorAll(`#name-${number}-choice`);
-      const choiceType = document.getElementById(`choice-${number}-type-value`)?.value || '';
-      const name = inputs[0]?.value || '';
-      const text = inputs[1]?.value || '';
-      let nextIds = arrows.filter(a =>
-        a.start === `choice-right-${number}-anchor` || a.start === `choice-left-${number}-anchor`
-      ).map(a => { const p = a.end.split('-'); return `${p[0]}-${p[2]}`; });
-      result.push({ id: `choiceTest-${number}`, type: choiceType, name, text, nextIds: nextIds.length ? nextIds : null });
-    });
-    return result;
-  }, [speeches, choices, arrows]);
+    const gatherData = useCallback(() => {
+        const result = [];
+
+        speeches.forEach(({ number, coords }) => { // Извлекаем coords
+            const name = document.getElementById(`name-${number}-speech`)?.value || '';
+            const text = document.getElementById(`text-${number}-speech`)?.value || '';
+            let nextIds = arrows.filter(a =>
+                a.start === `speech-right-${number}-anchor` || a.start === `speech-left-${number}-anchor`
+            ).map(a => { const p = a.end.split('-'); return `${p[0]}-${p[2]}`; });
+
+            result.push({
+                id: `speechTestr-${number}`,
+                type: 'speech',
+                name,
+                text,
+                nextIds: nextIds.length ? nextIds : null,
+                x: coords.x, // Добавляем X
+                y: coords.y  // Добавляем Y
+            });
+        });
+
+        choices.forEach(({ number, coords }) => { // Извлекаем coords
+            const inputs = document.querySelectorAll(`#name-${number}-choice`);
+            const choiceType = document.getElementById(`choice-${number}-type-value`)?.value || '';
+            const name = inputs[0]?.value || '';
+            const text = inputs[1]?.value || '';
+            let nextIds = arrows.filter(a =>
+                a.start === `choice-right-${number}-anchor` || a.start === `choice-left-${number}-anchor`
+            ).map(a => { const p = a.end.split('-'); return `${p[0]}-${p[2]}`; });
+
+            result.push({
+                id: `choiceTest-${number}`,
+                type: choiceType,
+                name,
+                text,
+                nextIds: nextIds.length ? nextIds : null,
+                x: coords.x, // Добавляем X
+                y: coords.y  // Добавляем Y
+            });
+        });
+
+        return result;
+    }, [speeches, choices, arrows]);
 
   const sendData = useCallback(async () => {
     try {

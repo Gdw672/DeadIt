@@ -3,5 +3,6 @@
     public interface IDatabaseInserterService
     {
         public string InsertInfo(List<object> data);
+        public List<object> GetAllNodes();
     }
 }

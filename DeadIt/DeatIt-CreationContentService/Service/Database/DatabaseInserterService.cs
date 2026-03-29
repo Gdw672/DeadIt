@@ -32,7 +32,10 @@ namespace DeatIt_CreationContentService.Service.Database
                 ID = "s-" + a.Id.Split("-")[1],
                 Name = a.Name,
                 Text = a.Text,
+                X = (float)a.X, 
+                Y = (float)a.Y,
                 NextID = a.NextId?.Replace("choice", "c")?.Replace("speech", "s")
+
             }).ToList();
 
             var entitiesChoice = choices.Select(a => new DBChoice
@@ -41,6 +44,8 @@ namespace DeatIt_CreationContentService.Service.Database
                 ChoiceType = a.Type,
                 Name = a.Name,
                 Text = a.Text,
+                X = (float)a.X,
+                Y = (float)a.Y,
                 NextID = a.NextId?.Replace("choice", "c")?.Replace("speech", "s")
             }).ToList();
 
@@ -58,6 +63,8 @@ namespace DeatIt_CreationContentService.Service.Database
                     existing.Name = speech.Name;
                     existing.Text = speech.Text;
                     existing.NextID = speech.NextID;
+                    existing.X = speech.X;
+                    existing.Y = speech.Y;
                 }
                 else
                 {
@@ -76,6 +83,8 @@ namespace DeatIt_CreationContentService.Service.Database
                     existing.Text = choice.Text;
                     existing.ChoiceType = choice.ChoiceType;
                     existing.NextID = choice.NextID;
+                    existing.Y = choice.Y;
+                    existing.X = choice.X;
                 }
                 else
                 {
@@ -87,6 +96,8 @@ namespace DeatIt_CreationContentService.Service.Database
 
             return "Ok";
         }
+
+
 
         private List<AnswerData> MapData(object data)
         {
@@ -120,9 +131,57 @@ namespace DeatIt_CreationContentService.Service.Database
                         Type = item.GetProperty("type").GetString(),
                         Name = item.GetProperty("name").GetString(),
                         Text = item.GetProperty("text").GetString(),
+                        X = item.GetProperty("x").GetDouble(),
+                        Y = item.GetProperty("y").GetDouble(),
                         NextId = nextIds
                     });
                 }
+            }
+
+            return result;
+        }
+
+        public List<object> GetAllNodes()
+        {
+            var speeches = contentCreationDBContext.textDB.ToList();
+            var choices = contentCreationDBContext.choiceDB.ToList();
+
+            var result = new List<object>();
+
+            foreach (var s in speeches)
+            {
+                result.Add(new
+                {
+                    id = s.ID.Replace("s-", "speech-"),
+                    type = "speech",
+                    name = s.Name,
+                    text = s.Text,
+                    x = s.X, // Добавлено
+                    y = s.Y, // Добавлено
+                    nextIds = string.IsNullOrEmpty(s.NextID)
+                        ? null
+                        : s.NextID.Split(", ")
+                            .Select(id => id.StartsWith("s-") ? id.Replace("s-", "speech-") : id.Replace("c-", "choice-"))
+                            .ToList()
+                });
+            }
+
+            foreach (var c in choices)
+            {
+                result.Add(new
+                {
+                    id = c.ID.Replace("c-", "choice-"),
+                    type = c.ChoiceType,
+                    name = c.Name,
+                    text = c.Text,
+                    x = c.X, // Добавлено
+                    y = c.Y, // Добавлено
+                    nextIds = string.IsNullOrEmpty(c.NextID)
+                        ? null
+                        : c.NextID.Split(", ")
+                            .Select(id => id.StartsWith("s-") ? id.Replace("s-", "speech-") : id.Replace("c-", "choice-"))
+                            .ToList()
+                });
             }
 
             return result;

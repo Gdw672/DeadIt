@@ -21,5 +21,12 @@ namespace DeatIt_CreationContentService.Controllers
             databaseInserterService.InsertInfo(data);
             return Ok (databaseInserterService.InsertInfo(data));
         }
+
+        [HttpGet("GetAllData")]
+        public IActionResult GetAllData()
+        {
+          return Ok(databaseInserterService.GetAllNodes());
+        }
+
     }
 }
